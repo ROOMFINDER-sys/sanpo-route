@@ -1,1463 +1,1507 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>SANPO</title>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+/* =========================================================
+   BASE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  <title>SANPO | Walk Better</title>
+:root {
+  --bg: #f4f3ee;
+  --surface: #ffffff;
+  --text: #181a18;
+  --muted: #777a74;
+  --line: #dedfd9;
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  >
+  --green: #315f4d;
+  --green-dark: #214737;
+  --green-soft: #e1ebe5;
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  --nav-height: 72px;
+  --header-height: 58px;
+}
 
-    :root {
-      --bg: #f5f4ef;
-      --surface: #ffffff;
-      --surface-soft: #eeeee8;
-      --text: #191a18;
-      --muted: #777871;
-      --line: #dbdcd5;
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
 
-      --green: #315f4d;
-      --green-dark: #1f4738;
-      --green-soft: #dfeae4;
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Hiragino Sans",
+    "Yu Gothic",
+    Meiryo,
+    sans-serif;
 
-      --black: #161715;
+  background: var(--bg);
+  color: var(--text);
 
-      --radius: 14px;
-    }
+  overflow-x: hidden;
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
+button,
+input,
+select {
+  font: inherit;
+}
 
-    body {
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "Hiragino Sans",
-        "Yu Gothic",
-        Meiryo,
-        sans-serif;
+button {
+  cursor: pointer;
+}
 
-      background: var(--bg);
-      color: var(--text);
+button:disabled {
+  cursor: default;
+  opacity: .6;
+}
 
-      padding-bottom: 80px;
+.app {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
 
-      line-height: 1.5;
-    }
 
-    button,
-    input,
-    select {
-      font: inherit;
-    }
+/* =========================================================
+   HEADER
+========================================================= */
 
-    button {
-      cursor: pointer;
-    }
+.header {
+  height: var(--header-height);
 
-    .app {
-      max-width: 1180px;
-      margin: 0 auto;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    /* =========================
-       HEADER
-    ========================= */
+  padding: 0 18px;
 
-    header {
-      height: 68px;
+  border-bottom: 1px solid var(--line);
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  background: rgba(244,243,238,.96);
 
-      padding: 0 24px;
+  position: fixed;
+  top: 0;
+  left: 50%;
 
-      background: rgba(245,244,239,.94);
+  transform: translateX(-50%);
 
-      border-bottom: 1px solid var(--line);
+  width: 100%;
+  max-width: 1100px;
 
-      position: sticky;
-      top: 0;
+  z-index: 3000;
 
-      z-index: 2000;
+  backdrop-filter: blur(14px);
+}
 
-      backdrop-filter: blur(12px);
-    }
+.brand {
+  display: flex;
+  align-items: center;
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+  gap: 9px;
 
-      font-size: 18px;
-      font-weight: 800;
+  font-size: 17px;
+  font-weight: 800;
 
-      letter-spacing: .12em;
-    }
+  letter-spacing: .13em;
+}
 
-    .brand-symbol {
-      width: 28px;
-      height: 28px;
+.logo {
+  width: 25px;
+  height: 25px;
 
-      border: 2px solid var(--green);
+  border: 2px solid var(--green);
 
-      border-radius: 50%;
+  border-radius: 50%;
 
-      position: relative;
-    }
+  position: relative;
+}
 
-    .brand-symbol::before {
-      content: "";
+.logo::before {
+  content: "";
 
-      position: absolute;
+  width: 7px;
+  height: 7px;
 
-      width: 8px;
-      height: 8px;
+  background: var(--green);
 
-      border-radius: 50%;
+  border-radius: 50%;
 
-      background: var(--green);
+  position: absolute;
 
-      top: 4px;
-      left: 8px;
-    }
+  top: 4px;
+  left: 7px;
+}
 
-    .brand-symbol::after {
-      content: "";
+.logo::after {
+  content: "";
 
-      position: absolute;
+  width: 2px;
+  height: 7px;
 
-      width: 2px;
-      height: 8px;
+  background: var(--green);
 
-      background: var(--green);
+  position: absolute;
 
-      bottom: 4px;
-      left: 12px;
+  bottom: 3px;
+  left: 11px;
 
-      transform: rotate(20deg);
-    }
+  transform: rotate(22deg);
+}
 
-    .header-text {
-      color: var(--muted);
+.header-date {
+  font-size: 11px;
+  color: var(--muted);
+}
 
-      font-size: 11px;
-    }
 
-    /* =========================
-       PAGE
-    ========================= */
+/* =========================================================
+   PAGE SYSTEM
+========================================================= */
 
-    .page {
-      display: none;
-    }
+.page {
+  display: none;
 
-    .page.active {
-      display: block;
-    }
+  min-height: 100dvh;
 
-    .page-content {
-      padding: 34px 24px 48px;
-    }
+  padding:
+    calc(var(--header-height) + 16px)
+    18px
+    calc(var(--nav-height) + 18px);
+}
 
-    /* =========================
-       HERO
-    ========================= */
+.page.active {
+  display: block;
+}
 
-    .hero {
-      padding: 54px 24px 28px;
-    }
+.page-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    .hero-meta {
-      color: var(--green);
+  margin-bottom: 14px;
+}
 
-      font-size: 11px;
-      font-weight: 700;
+.page-title {
+  font-size: 20px;
+  font-weight: 750;
 
-      letter-spacing: .14em;
+  letter-spacing: -.02em;
+}
 
-      margin-bottom: 14px;
-    }
+.page-meta {
+  font-size: 10px;
 
-    .hero h1 {
-      font-size: clamp(42px, 7vw, 78px);
-      line-height: .98;
+  color: var(--muted);
 
-      letter-spacing: -.055em;
+  letter-spacing: .08em;
+}
 
-      font-weight: 750;
 
-      max-width: 800px;
-    }
+/* =========================================================
+   HOME
+========================================================= */
 
-    .hero p {
-      margin-top: 24px;
+.home-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 
-      max-width: 560px;
+  margin-bottom: 10px;
+}
 
-      color: var(--muted);
+.home-label {
+  font-size: 11px;
+  color: var(--muted);
 
-      font-size: 14px;
-      line-height: 1.9;
-    }
+  letter-spacing: .08em;
+}
 
-    /* =========================
-       SECTION
-    ========================= */
+.home-date {
+  font-size: 12px;
+  font-weight: 700;
+}
 
-    .section {
-      margin-bottom: 42px;
-    }
+.primary-stat {
+  padding: 16px 0 18px;
 
-    .section-heading {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
 
-      gap: 16px;
+.primary-number {
+  font-size: clamp(48px, 10vw, 74px);
 
-      margin-bottom: 18px;
-    }
+  line-height: .95;
 
-    .section-title {
-      font-size: 18px;
-      font-weight: 750;
-    }
+  font-weight: 720;
 
-    .section-note {
-      font-size: 11px;
-      color: var(--muted);
-    }
+  letter-spacing: -.065em;
+}
 
-    /* =========================
-       TODAY
-    ========================= */
+.primary-unit {
+  font-size: 15px;
 
-    .today-panel {
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
+  margin-left: 5px;
 
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
+  color: var(--muted);
+}
 
-    .today-item {
-      padding: 22px 0;
-    }
+.primary-label {
+  margin-top: 9px;
 
-    .today-item:not(:last-child) {
-      border-right: 1px solid var(--line);
-      padding-right: 20px;
-      margin-right: 20px;
-    }
+  font-size: 11px;
+  color: var(--muted);
+}
 
-    .today-label {
-      font-size: 11px;
-      color: var(--muted);
+.stats-row {
+  display: grid;
 
-      margin-bottom: 8px;
-    }
+  grid-template-columns: repeat(3, 1fr);
 
-    .today-value {
-      font-size: clamp(27px, 4vw, 40px);
-      font-weight: 720;
+  border-bottom: 1px solid var(--line);
+}
 
-      letter-spacing: -.04em;
-    }
+.stat {
+  padding: 15px 0;
+}
 
-    .today-unit {
-      font-size: 11px;
-      color: var(--muted);
+.stat:not(:last-child) {
+  border-right: 1px solid var(--line);
 
-      margin-left: 4px;
-    }
+  margin-right: 12px;
+  padding-right: 12px;
+}
 
-    /* =========================
-       FOOD CONVERSION
-    ========================= */
+.stat-label {
+  font-size: 9px;
 
-    .conversion {
-      padding: 28px 0;
+  color: var(--muted);
 
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
+  margin-bottom: 5px;
+}
 
-    .conversion-kcal {
-      font-size: 13px;
-      color: var(--muted);
-    }
+.stat-number {
+  font-size: 22px;
 
-    .conversion-main {
-      margin-top: 8px;
+  font-weight: 700;
 
-      font-size: clamp(34px, 5vw, 58px);
-      font-weight: 720;
+  letter-spacing: -.04em;
+}
 
-      letter-spacing: -.055em;
+.stat-unit {
+  font-size: 9px;
 
-      color: var(--green-dark);
-    }
+  color: var(--muted);
 
-    .conversion-main span {
-      font-size: .52em;
-      color: var(--muted);
+  margin-left: 2px;
+}
 
-      letter-spacing: -.02em;
-    }
 
-    .conversion-grid {
-      margin-top: 28px;
+/* FOOD */
 
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+.food-section {
+  padding: 17px 0;
 
-      border-top: 1px solid var(--line);
-    }
+  border-bottom: 1px solid var(--line);
+}
 
-    .conversion-item {
-      padding-top: 16px;
-    }
+.small-heading {
+  font-size: 10px;
 
-    .conversion-item:not(:last-child) {
-      border-right: 1px solid var(--line);
-      padding-right: 18px;
-      margin-right: 18px;
-    }
+  color: var(--muted);
 
-    .conversion-food-name {
-      color: var(--muted);
-      font-size: 11px;
+  letter-spacing: .08em;
 
-      margin-bottom: 6px;
-    }
+  margin-bottom: 7px;
+}
 
-    .conversion-food-number {
-      font-size: 21px;
-      font-weight: 700;
-    }
+.food-main {
+  font-size: 28px;
 
-    .conversion-small {
-      margin-top: 16px;
+  font-weight: 720;
 
-      color: var(--muted);
-      font-size: 10px;
-    }
+  letter-spacing: -.04em;
 
-    /* =========================
-       ACTIVITY SOURCE
-    ========================= */
+  color: var(--green-dark);
+}
 
-    .activity-list {
-      border-top: 1px solid var(--line);
-    }
+.food-main span {
+  font-size: 12px;
 
-    .activity-row {
-      display: grid;
+  color: var(--muted);
 
-      grid-template-columns:
-        120px
-        1fr
-        auto;
+  font-weight: 500;
+}
 
-      align-items: center;
+.food-sub {
+  display: grid;
 
-      gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
 
-      padding: 17px 0;
+  gap: 14px;
 
-      border-bottom: 1px solid var(--line);
-    }
+  margin-top: 12px;
+}
 
-    .activity-source {
-      font-size: 11px;
-      font-weight: 700;
+.food-sub-item {
+  font-size: 11px;
+}
 
-      text-transform: uppercase;
+.food-sub-name {
+  color: var(--muted);
 
-      letter-spacing: .08em;
-    }
+  font-size: 9px;
 
-    .activity-name {
-      font-size: 13px;
-    }
+  margin-bottom: 2px;
+}
 
-    .activity-result {
-      font-size: 14px;
-      font-weight: 700;
-    }
+.food-sub-value {
+  font-weight: 700;
+}
 
-    .future {
-      color: #aaa;
-    }
 
-    /* =========================
-       WALK
-    ========================= */
+/* WEEK */
 
-    .walk-layout {
-      display: grid;
+.week-progress {
+  padding: 17px 0;
+}
 
-      grid-template-columns: 330px 1fr;
+.week-heading {
+  display: flex;
+  justify-content: space-between;
 
-      gap: 28px;
+  font-size: 10px;
 
-      align-items: start;
-    }
+  margin-bottom: 9px;
+}
 
-    .control-panel {
-      border-top: 1px solid var(--line);
-    }
+.week-heading span:first-child {
+  color: var(--muted);
+}
 
-    .form-block {
-      padding: 20px 0;
+.progress-track {
+  height: 5px;
 
-      border-bottom: 1px solid var(--line);
-    }
+  background: #dedfd9;
 
-    .form-label {
-      display: block;
+  overflow: hidden;
+}
 
-      font-size: 11px;
-      font-weight: 700;
+.progress-bar {
+  width: 0%;
+  height: 100%;
 
-      margin-bottom: 10px;
+  background: var(--green);
 
-      letter-spacing: .02em;
-    }
+  transition: width .3s ease;
+}
 
-    .location-status {
-      color: var(--muted);
+.week-info {
+  display: flex;
+  justify-content: space-between;
 
-      font-size: 12px;
-      line-height: 1.7;
+  margin-top: 8px;
 
-      margin-bottom: 10px;
-    }
+  font-size: 10px;
 
-    .location-status.active {
-      color: var(--green);
-      font-weight: 700;
-    }
+  color: var(--muted);
+}
 
-    .secondary-button {
-      width: 100%;
 
-      background: transparent;
+/* =========================================================
+   WALK PAGE
+========================================================= */
 
-      border: 1px solid var(--text);
+.walk-page {
+  padding-left: 0;
+  padding-right: 0;
+}
 
-      padding: 12px;
+.walk-header {
+  padding: 0 18px;
+}
 
-      color: var(--text);
+.map-wrap {
+  position: relative;
 
-      font-size: 12px;
-      font-weight: 700;
-    }
+  height:
+    calc(
+      100dvh
+      - var(--header-height)
+      - var(--nav-height)
+      - 150px
+    );
 
-    .time-grid {
-      display: grid;
+  min-height: 330px;
 
-      grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
 
-      gap: 6px;
-    }
+#map {
+  width: 100%;
+  height: 100%;
+}
 
-    .time-button {
-      border: 1px solid var(--line);
+.map-message {
+  position: absolute;
 
-      background: transparent;
+  top: 12px;
+  left: 50%;
 
-      padding: 11px 4px;
+  transform: translateX(-50%);
 
-      font-size: 11px;
+  z-index: 800;
 
-      color: var(--muted);
-    }
+  background: rgba(255,255,255,.94);
 
-    .time-button.active {
-      background: var(--black);
-      color: white;
+  padding: 8px 12px;
 
-      border-color: var(--black);
-    }
+  font-size: 10px;
 
-    select,
-    input {
-      width: 100%;
+  white-space: nowrap;
 
-      border: none;
+  border: 1px solid var(--line);
+}
 
-      border-bottom: 1px solid var(--text);
+.walk-controls {
+  padding: 12px 18px 0;
+}
 
-      background: transparent;
+.quick-controls {
+  display: grid;
 
-      padding: 10px 2px;
+  grid-template-columns: 1fr 1fr 1.5fr;
 
-      outline: none;
-    }
+  gap: 7px;
+}
 
-    .generate-button {
-      width: 100%;
+.quick-button,
+.quick-select {
+  height: 40px;
 
-      margin-top: 22px;
+  border: 1px solid var(--line);
 
-      padding: 15px 18px;
+  background: transparent;
 
-      border: none;
+  color: var(--text);
 
-      background: var(--green);
+  font-size: 11px;
 
-      color: white;
+  padding: 0 9px;
 
-      font-weight: 700;
+  text-align: center;
+}
 
-      font-size: 13px;
-    }
+.route-button {
+  border: none;
 
-    .generate-button:hover {
-      background: var(--green-dark);
-    }
+  background: var(--green);
 
-    .generate-button:disabled {
-      background: #aaa;
-    }
+  color: white;
 
-    .another-button {
-      width: 100%;
+  font-size: 11px;
 
-      margin-top: 8px;
+  font-weight: 700;
+}
 
-      padding: 13px;
+.walk-secondary {
+  display: flex;
 
-      border: 0;
+  justify-content: space-between;
+  align-items: center;
 
-      background: transparent;
+  margin-top: 8px;
+}
 
-      color: var(--muted);
+.text-button {
+  border: none;
 
-      font-size: 11px;
+  background: transparent;
 
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
+  color: var(--muted);
 
-    .loading {
-      display: none;
+  font-size: 10px;
 
-      margin-top: 12px;
+  text-decoration: underline;
 
-      color: var(--green);
+  text-underline-offset: 3px;
+}
 
-      font-size: 11px;
+.loading {
+  display: none;
 
-      text-align: center;
-    }
+  font-size: 9px;
 
-    .loading.show {
-      display: block;
-    }
+  color: var(--green);
+}
 
-    /* =========================
-       MAP
-    ========================= */
+.loading.show {
+  display: block;
+}
 
-    #map {
-      height: 620px;
-      width: 100%;
 
-      border-radius: 8px;
+/* MAP MARKER */
 
-      overflow: hidden;
-    }
+.start-marker {
+  width: 24px;
+  height: 24px;
 
-    .leaflet-control-zoom {
-      border: none !important;
-    }
+  background: var(--green);
 
-    .leaflet-control-zoom a {
-      border: 0 !important;
-    }
+  border: 5px solid white;
 
-    .start-marker {
-      width: 26px;
-      height: 26px;
+  border-radius: 50%;
 
-      background: var(--green);
+  box-shadow: 0 0 0 2px var(--green);
+}
 
-      border-radius: 50%;
+.leaflet-div-icon {
+  border: none;
+  background: transparent;
+}
 
-      border: 5px solid white;
 
-      box-shadow:
-        0 0 0 2px var(--green);
-    }
+/* ROUTE RESULT */
 
-    .leaflet-div-icon {
-      border: none;
-      background: transparent;
-    }
+.route-result {
+  display: none;
 
-    /* =========================
-       RESULT
-    ========================= */
+  position: absolute;
 
-    .result {
-      display: none;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
 
-      margin-top: 22px;
+  z-index: 900;
 
-      border-top: 1px solid var(--line);
+  background: rgba(255,255,255,.96);
 
-      padding-top: 20px;
-    }
+  border: 1px solid var(--line);
 
-    .result.show {
-      display: block;
-    }
+  padding: 12px;
 
-    .result-title {
-      font-size: 17px;
-      font-weight: 700;
+  backdrop-filter: blur(10px);
+}
 
-      margin-bottom: 16px;
-    }
+.route-result.show {
+  display: block;
+}
 
-    .result-metrics {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+.route-result-grid {
+  display: grid;
 
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
+  grid-template-columns: repeat(4,1fr);
 
-    .result-item {
-      padding: 15px 0;
-    }
+  gap: 8px;
+}
 
-    .result-item:not(:last-child) {
-      border-right: 1px solid var(--line);
-      padding-right: 14px;
-      margin-right: 14px;
-    }
+.route-result-label {
+  font-size: 8px;
 
-    .result-label {
-      font-size: 10px;
-      color: var(--muted);
+  color: var(--muted);
+}
 
-      margin-bottom: 5px;
-    }
+.route-result-value {
+  margin-top: 2px;
 
-    .result-value {
-      font-size: 20px;
-      font-weight: 700;
-    }
+  font-size: 14px;
 
-    .result-food {
-      margin-top: 18px;
+  font-weight: 700;
+}
 
-      font-size: 18px;
-      font-weight: 700;
+.route-actions {
+  display: grid;
 
-      color: var(--green-dark);
-    }
+  grid-template-columns: 1fr 1fr;
 
-    .record-button {
-      width: 100%;
+  gap: 7px;
 
-      margin-top: 18px;
+  margin-top: 10px;
+}
 
-      padding: 14px;
+.result-button {
+  height: 34px;
 
-      background: var(--black);
-      color: white;
+  border: 1px solid var(--text);
 
-      border: none;
+  background: transparent;
 
-      font-size: 12px;
-      font-weight: 700;
-    }
+  font-size: 10px;
 
-    /* =========================
-       RECORDS
-    ========================= */
+  font-weight: 700;
+}
 
-    .period-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+.result-button.primary {
+  background: var(--text);
+  color: white;
+}
 
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
 
-    .period-item {
-      padding: 20px 0;
-    }
+/* =========================================================
+   RECORD PAGE
+========================================================= */
 
-    .period-item:not(:last-child) {
-      border-right: 1px solid var(--line);
-      padding-right: 18px;
-      margin-right: 18px;
-    }
+.record-layout {
+  display: grid;
 
-    .period-label {
-      font-size: 10px;
-      color: var(--muted);
+  grid-template-columns: minmax(180px, .9fr) 1.1fr;
 
-      margin-bottom: 7px;
-    }
+  gap: 22px;
 
-    .period-value {
-      font-size: 25px;
-      font-weight: 720;
-    }
+  height:
+    calc(
+      100dvh
+      - var(--header-height)
+      - var(--nav-height)
+      - 72px
+    );
+}
 
-    .history-list {
-      border-top: 1px solid var(--line);
-    }
+.motivation {
+  min-height: 0;
 
-    .history-item {
-      display: grid;
+  display: flex;
+  flex-direction: column;
+}
 
-      grid-template-columns:
-        1.2fr
-        repeat(4,1fr);
+.photo-frame {
+  flex: 1;
 
-      gap: 12px;
+  min-height: 240px;
 
-      padding: 16px 0;
+  position: relative;
 
-      border-bottom: 1px solid var(--line);
-    }
+  overflow: hidden;
 
-    .history-date {
-      font-weight: 700;
-      font-size: 12px;
-    }
+  background: #e8e7e1;
 
-    .history-value {
-      font-size: 12px;
-    }
+  border: 1px solid var(--line);
+}
 
-    .history-value span {
-      display: block;
+.photo-frame img {
+  width: 100%;
+  height: 100%;
 
-      font-size: 9px;
-      color: var(--muted);
+  object-fit: cover;
 
-      margin-bottom: 3px;
-    }
+  display: none;
+}
 
-    .empty {
-      padding: 25px 0;
+.photo-frame.has-image img {
+  display: block;
+}
 
-      font-size: 12px;
-      color: var(--muted);
-    }
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
 
-    .delete-button {
-      margin-top: 18px;
+  min-height: 240px;
 
-      border: none;
+  display: flex;
+  flex-direction: column;
 
-      background: transparent;
+  justify-content: center;
+  align-items: center;
 
-      color: #999;
+  text-align: center;
 
-      font-size: 10px;
+  padding: 24px;
 
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
+  color: var(--muted);
+}
 
-    /* =========================
-       SETTINGS
-    ========================= */
+.photo-frame.has-image .photo-placeholder {
+  display: none;
+}
 
-    .settings-form {
-      max-width: 680px;
+.photo-placeholder-title {
+  font-size: 13px;
 
-      border-top: 1px solid var(--line);
-    }
+  font-weight: 700;
 
-    .setting-row {
-      display: grid;
+  color: var(--text);
+}
 
-      grid-template-columns: 170px 1fr;
+.photo-placeholder-text {
+  margin-top: 7px;
 
-      gap: 20px;
+  max-width: 220px;
 
-      align-items: center;
+  font-size: 10px;
 
-      padding: 18px 0;
+  line-height: 1.7;
+}
 
-      border-bottom: 1px solid var(--line);
-    }
+.photo-actions {
+  display: flex;
 
-    .setting-label {
-      font-size: 12px;
-      font-weight: 700;
-    }
+  gap: 14px;
 
-    .save-button {
-      margin-top: 20px;
+  margin-top: 10px;
+}
 
-      background: var(--green);
+.photo-button {
+  border: none;
 
-      color: white;
+  background: transparent;
 
-      border: none;
+  padding: 0;
 
-      padding: 13px 22px;
+  font-size: 10px;
 
-      font-weight: 700;
-    }
+  color: var(--green);
 
-    .profile-status {
-      margin-top: 10px;
+  text-decoration: underline;
 
-      font-size: 11px;
-      color: var(--green);
+  text-underline-offset: 3px;
+}
 
-      min-height: 16px;
-    }
+.photo-button.delete {
+  color: #999;
+}
 
-    .future-note {
-      max-width: 680px;
+#photoInput {
+  display: none;
+}
 
-      margin-top: 34px;
+.motivation-caption {
+  margin-top: 13px;
+}
 
-      padding-top: 20px;
+.motivation-label {
+  font-size: 9px;
 
-      border-top: 1px solid var(--line);
+  color: var(--muted);
 
-      color: var(--muted);
+  letter-spacing: .12em;
+}
 
-      font-size: 11px;
-      line-height: 1.9;
-    }
+.motivation-text {
+  margin-top: 4px;
 
-    /* =========================
-       NAV
-    ========================= */
+  font-size: 17px;
 
-    .bottom-nav {
-      position: fixed;
+  font-weight: 700;
+}
 
-      bottom: 0;
-      left: 50%;
 
-      transform: translateX(-50%);
+/* RECORD DATA */
 
-      width: 100%;
-      max-width: 1180px;
+.record-data {
+  min-width: 0;
 
-      height: 72px;
+  overflow: hidden;
+}
 
-      display: grid;
-      grid-template-columns: repeat(4,1fr);
+.month-big {
+  padding-bottom: 14px;
 
-      background: rgba(245,244,239,.97);
+  border-bottom: 1px solid var(--line);
+}
 
-      border-top: 1px solid var(--line);
+.month-label {
+  font-size: 9px;
 
-      z-index: 3000;
+  color: var(--muted);
 
-      backdrop-filter: blur(12px);
-    }
+  margin-bottom: 4px;
+}
 
-    .nav-button {
-      border: none;
+.month-number {
+  font-size: 42px;
 
-      background: transparent;
+  font-weight: 720;
 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+  letter-spacing: -.055em;
+}
 
-      gap: 4px;
+.month-number span {
+  font-size: 11px;
 
-      color: #92938d;
+  color: var(--muted);
+}
 
-      font-size: 9px;
-    }
+.month-stats {
+  display: grid;
 
-    .nav-button svg {
-      width: 20px;
-      height: 20px;
+  grid-template-columns: 1fr 1fr;
 
-      fill: none;
-      stroke: currentColor;
+  border-bottom: 1px solid var(--line);
+}
 
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
+.month-stat {
+  padding: 12px 0;
+}
 
-    .nav-button.active {
-      color: var(--green-dark);
-    }
+.month-stat:first-child {
+  border-right: 1px solid var(--line);
 
-    /* =========================
-       MOBILE
-    ========================= */
+  margin-right: 12px;
+  padding-right: 12px;
+}
 
-    @media (max-width: 900px) {
+.month-stat-label {
+  font-size: 9px;
 
-      .today-panel,
-      .period-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+  color: var(--muted);
+}
 
-      .today-item:nth-child(2),
-      .period-item:nth-child(2) {
-        border-right: none;
-        margin-right: 0;
-      }
+.month-stat-value {
+  margin-top: 3px;
 
-      .walk-layout {
-        grid-template-columns: 1fr;
-      }
+  font-size: 18px;
 
-      .conversion-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+  font-weight: 700;
+}
 
-      .result-metrics {
-        grid-template-columns: 1fr 1fr;
-      }
+.month-food {
+  padding: 13px 0;
 
-      #map {
-        height: 500px;
-      }
+  border-bottom: 1px solid var(--line);
+}
 
-    }
+.month-food-main {
+  margin-top: 3px;
 
-    @media (max-width: 600px) {
+  font-size: 20px;
 
-      header {
-        height: 60px;
-        padding: 0 16px;
-      }
+  color: var(--green-dark);
 
-      .header-text {
-        display: none;
-      }
+  font-weight: 700;
+}
 
-      .hero {
-        padding: 36px 18px 20px;
-      }
+.history-title {
+  margin-top: 13px;
 
-      .hero h1 {
-        font-size: 45px;
-      }
+  font-size: 10px;
 
-      .page-content {
-        padding: 24px 18px 40px;
-      }
+  font-weight: 700;
+}
 
-      .today-panel {
-        grid-template-columns: 1fr 1fr;
-      }
+.history-list {
+  margin-top: 6px;
 
-      .today-item {
-        padding: 18px 0;
-      }
+  max-height: 145px;
 
-      .today-item:not(:last-child) {
-        margin-right: 10px;
-        padding-right: 10px;
-      }
+  overflow-y: auto;
 
-      .conversion-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+  border-top: 1px solid var(--line);
+}
 
-      .activity-row {
-        grid-template-columns: 80px 1fr auto;
-      }
+.history-item {
+  display: grid;
 
-      #map {
-        height: 440px;
-      }
+  grid-template-columns: 1fr auto auto;
 
-      .history-item {
-        grid-template-columns: 1fr 1fr;
-      }
+  gap: 12px;
 
-      .history-date {
-        grid-column: 1 / -1;
-      }
+  padding: 8px 0;
 
-      .setting-row {
-        grid-template-columns: 1fr;
-        gap: 4px;
-      }
+  border-bottom: 1px solid var(--line);
 
-    }
-  </style>
+  font-size: 9px;
+}
+
+.history-date {
+  font-weight: 700;
+}
+
+.history-sub {
+  color: var(--muted);
+}
+
+.empty {
+  padding: 14px 0;
+
+  font-size: 10px;
+
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.settings {
+  max-width: 600px;
+
+  border-top: 1px solid var(--line);
+}
+
+.setting-row {
+  display: grid;
+
+  grid-template-columns: 150px 1fr;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 17px 0;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.setting-label {
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.setting-input {
+  width: 100%;
+
+  border: none;
+
+  border-bottom: 1px solid #aaa;
+
+  background: transparent;
+
+  padding: 8px 2px;
+
+  outline: none;
+}
+
+.save-profile {
+  margin-top: 18px;
+
+  border: none;
+
+  background: var(--green);
+
+  color: white;
+
+  padding: 12px 24px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.profile-status {
+  margin-top: 8px;
+
+  font-size: 10px;
+
+  color: var(--green);
+
+  min-height: 15px;
+}
+
+.future-setting {
+  margin-top: 26px;
+
+  border-top: 1px solid var(--line);
+
+  padding-top: 16px;
+}
+
+.future-title {
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.future-text {
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+
+  line-height: 1.8;
+
+  max-width: 500px;
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+.bottom-nav {
+  position: fixed;
+
+  left: 50%;
+  bottom: 0;
+
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: 1100px;
+
+  height:
+    calc(
+      var(--nav-height)
+      + env(safe-area-inset-bottom)
+    );
+
+  padding-bottom:
+    env(safe-area-inset-bottom);
+
+  display: grid;
+
+  grid-template-columns: repeat(4,1fr);
+
+  background: rgba(244,243,238,.97);
+
+  border-top: 1px solid var(--line);
+
+  z-index: 4000;
+
+  backdrop-filter: blur(14px);
+}
+
+.nav-button {
+  border: none;
+
+  background: transparent;
+
+  color: #979992;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 3px;
+
+  font-size: 9px;
+}
+
+.nav-button.active {
+  color: var(--green-dark);
+}
+
+.nav-button svg {
+  width: 20px;
+  height: 20px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .page {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .walk-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .walk-header {
+    padding: 0 15px;
+  }
+
+  .walk-controls {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .record-layout {
+    grid-template-columns: .9fr 1.1fr;
+
+    gap: 12px;
+  }
+
+  .photo-frame {
+    min-height: 210px;
+  }
+
+  .photo-placeholder {
+    min-height: 210px;
+
+    padding: 14px;
+  }
+
+  .motivation-text {
+    font-size: 14px;
+  }
+
+  .month-number {
+    font-size: 34px;
+  }
+
+  .month-stat-value {
+    font-size: 15px;
+  }
+
+  .month-food-main {
+    font-size: 17px;
+  }
+
+}
+
+
+/* VERY SMALL PHONE */
+
+@media (max-width: 390px) {
+
+  .primary-number {
+    font-size: 48px;
+  }
+
+  .stat-number {
+    font-size: 19px;
+  }
+
+  .food-main {
+    font-size: 23px;
+  }
+
+  .record-layout {
+    gap: 9px;
+  }
+
+  .month-number {
+    font-size: 30px;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-<header>
+<header class="header">
 
   <div class="brand">
-
-    <div class="brand-symbol"></div>
-
+    <div class="logo"></div>
     SANPO
-
   </div>
 
-  <div class="header-text">
-    Walking, made visible.
-  </div>
+  <div
+    id="headerDate"
+    class="header-date"
+  ></div>
 
 </header>
 
 
-<!-- HOME -->
+<!-- ======================================================
+     HOME
+====================================================== -->
 
 <section
   id="homePage"
   class="page active"
 >
 
-  <div class="hero">
+  <div class="home-top">
 
-    <div class="hero-meta">
-      DAILY ACTIVITY
+    <div class="home-label">
+      TODAY
     </div>
 
-    <h1>
-      歩いたぶんを、<br>
-      見える成果に。
-    </h1>
-
-    <p>
-      散歩も、いつもの移動も。
-      毎日の歩行を積み重ねて、
-      距離・歩数・消費エネルギーを記録します。
-    </p>
+    <div
+      id="homeDate"
+      class="home-date"
+    ></div>
 
   </div>
 
 
-  <div class="page-content">
+  <div class="primary-stat">
 
-    <section class="section">
+    <div>
 
-      <div class="section-heading">
+      <span
+        id="todayDistance"
+        class="primary-number"
+      >
+        0.0
+      </span>
 
-        <div class="section-title">
-          今日
-        </div>
+      <span class="primary-unit">
+        km
+      </span>
 
-        <div class="section-note">
-          SANPOで記録した活動
-        </div>
+    </div>
+
+    <div class="primary-label">
+      今日歩いた距離
+    </div>
+
+  </div>
+
+
+  <div class="stats-row">
+
+    <div class="stat">
+
+      <div class="stat-label">
+        STEPS
+      </div>
+
+      <div class="stat-number">
+
+        <span id="todaySteps">
+          0
+        </span>
 
       </div>
 
-
-      <div class="today-panel">
-
-        <div class="today-item">
-
-          <div class="today-label">
-            距離
-          </div>
-
-          <div class="today-value">
-            <span id="todayDistance">0.0</span>
-            <span class="today-unit">km</span>
-          </div>
-
-        </div>
+    </div>
 
 
-        <div class="today-item">
+    <div class="stat">
 
-          <div class="today-label">
-            歩数
-          </div>
-
-          <div class="today-value">
-            <span id="todaySteps">0</span>
-          </div>
-
-        </div>
-
-
-        <div class="today-item">
-
-          <div class="today-label">
-            消費
-          </div>
-
-          <div class="today-value">
-            <span id="todayCalories">0</span>
-            <span class="today-unit">kcal</span>
-          </div>
-
-        </div>
-
-
-        <div class="today-item">
-
-          <div class="today-label">
-            時間
-          </div>
-
-          <div class="today-value">
-            <span id="todayMinutes">0</span>
-            <span class="today-unit">min</span>
-          </div>
-
-        </div>
-
+      <div class="stat-label">
+        ENERGY
       </div>
 
-    </section>
+      <div class="stat-number">
 
+        <span id="todayCalories">
+          0
+        </span>
 
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div class="section-title">
-          どれくらい歩いた？
-        </div>
-
-        <div class="section-note">
-          食品カロリー換算の目安
-        </div>
-
-      </div>
-
-
-      <div class="conversion">
-
-        <div class="conversion-kcal">
-
-          TODAY /
-          <span id="conversionCalories">
-            0
-          </span>
+        <span class="stat-unit">
           kcal
+        </span>
 
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        TIME
+      </div>
+
+      <div class="stat-number">
+
+        <span id="todayMinutes">
+          0
+        </span>
+
+        <span class="stat-unit">
+          min
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="food-section">
+
+    <div class="small-heading">
+      TODAY'S RESULT
+    </div>
+
+    <div class="food-main">
+
+      おにぎり
+
+      <strong id="todayRice">
+        0.0
+      </strong>
+
+      <span>
+        個分
+      </span>
+
+    </div>
+
+
+    <div class="food-sub">
+
+      <div class="food-sub-item">
+
+        <div class="food-sub-name">
+          バナナ
         </div>
 
-
-        <div class="conversion-main">
-
-          おにぎり
-          <strong id="todayRiceMain">
+        <div class="food-sub-value">
+          <span id="todayBanana">
             0.0
-          </strong>
-          <span>
-            個分
           </span>
-
-        </div>
-
-
-        <div class="conversion-grid">
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              バナナ
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="todayBanana">
-                0.0
-              </span>
-              本
-            </div>
-
-          </div>
-
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              ショートケーキ
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="todayCake">
-                0.0
-              </span>
-              個
-            </div>
-
-          </div>
-
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              ラーメン
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="todayRamen">
-                0.0
-              </span>
-              杯
-            </div>
-
-          </div>
-
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              ハンバーガー
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="todayBurger">
-                0.0
-              </span>
-              個
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="conversion-small">
-          食品のカロリーは商品・量によって異なります。表示値はSANPO内の目安です。
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div class="section-title">
-          活動の内訳
+          本
         </div>
 
       </div>
 
 
-      <div class="activity-list">
+      <div class="food-sub-item">
 
-        <div class="activity-row">
-
-          <div class="activity-source">
-            SANPO
-          </div>
-
-          <div class="activity-name">
-            散歩として記録
-          </div>
-
-          <div class="activity-result">
-            <span id="sanpoActivitySteps">
-              0
-            </span>
-            歩
-          </div>
-
+        <div class="food-sub-name">
+          ケーキ
         </div>
 
-
-        <div class="activity-row future">
-
-          <div class="activity-source">
-            DAILY
-          </div>
-
-          <div class="activity-name">
-            普段の移動
-          </div>
-
-          <div class="activity-result">
-            coming later
-          </div>
-
+        <div class="food-sub-value">
+          <span id="todayCake">
+            0.0
+          </span>
+          個
         </div>
 
       </div>
 
-    </section>
+
+      <div class="food-sub-item">
+
+        <div class="food-sub-name">
+          ラーメン
+        </div>
+
+        <div class="food-sub-value">
+          <span id="todayRamen">
+            0.0
+          </span>
+          杯
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="week-progress">
+
+    <div class="week-heading">
+
+      <span>
+        今週
+      </span>
+
+      <strong>
+        <span id="weekDistance">
+          0.0
+        </span>
+        km
+      </strong>
+
+    </div>
+
+
+    <div class="progress-track">
+
+      <div
+        id="weekProgressBar"
+        class="progress-bar"
+      ></div>
+
+    </div>
+
+
+    <div class="week-info">
+
+      <span>
+        WEEKLY ACTIVITY
+      </span>
+
+      <span>
+        目安 20 km
+      </span>
+
+    </div>
 
   </div>
 
 </section>
 
 
-<!-- WALK -->
+<!-- ======================================================
+     WALK
+====================================================== -->
 
 <section
   id="walkPage"
-  class="page"
+  class="page walk-page"
 >
 
-  <div class="page-content">
+  <div class="walk-header">
 
-    <section class="section">
+    <div class="page-title-row">
 
-      <div class="section-heading">
-
-        <div class="section-title">
-          散歩コース
-        </div>
-
-        <div class="section-note">
-          START / TIME / PACE
-        </div>
-
+      <div class="page-title">
+        散歩
       </div>
 
+      <div class="page-meta">
+        ROUTE
+      </div>
 
-      <div class="walk-layout">
+    </div>
 
-        <div class="control-panel">
-
-          <div class="form-block">
-
-            <label class="form-label">
-              START
-            </label>
-
-            <div
-              id="locationStatus"
-              class="location-status"
-            >
-              地図上の出発地点を選択してください。
-            </div>
+  </div>
 
 
-            <button
-              id="locationButton"
-              class="secondary-button"
-            >
-              現在地を使用
-            </button>
+  <div class="map-wrap">
 
+    <div id="map"></div>
+
+
+    <div
+      id="mapMessage"
+      class="map-message"
+    >
+      地図をタップしてスタート地点を設定
+    </div>
+
+
+    <div
+      id="routeResult"
+      class="route-result"
+    >
+
+      <div class="route-result-grid">
+
+        <div>
+
+          <div class="route-result-label">
+            DISTANCE
           </div>
 
-
-          <div class="form-block">
-
-            <label class="form-label">
-              TIME
-            </label>
-
-
-            <div class="time-grid">
-
-              <button
-                class="time-button"
-                data-time="15"
-              >
-                15
-              </button>
-
-              <button
-                class="time-button active"
-                data-time="30"
-              >
-                30
-              </button>
-
-              <button
-                class="time-button"
-                data-time="45"
-              >
-                45
-              </button>
-
-              <button
-                class="time-button"
-                data-time="60"
-              >
-                60
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <div class="form-block">
-
-            <label class="form-label">
-              PACE
-            </label>
-
-
-            <select id="pace">
-
-              <option value="3.5">
-                のんびり
-              </option>
-
-              <option
-                value="4.5"
-                selected
-              >
-                普通
-              </option>
-
-              <option value="5.5">
-                早歩き
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <button
-            id="generateButton"
-            class="generate-button"
-          >
-            コースを作成
-          </button>
-
-
-          <button
-            id="anotherButton"
-            class="another-button"
-          >
-            別のコースを生成
-          </button>
-
-
-          <div
-            id="loading"
-            class="loading"
-          >
-            ROUTE GENERATING...
+          <div class="route-result-value">
+            <span id="distanceValue">-</span>
+            km
           </div>
 
         </div>
@@ -1465,325 +1509,345 @@
 
         <div>
 
-          <div id="map"></div>
+          <div class="route-result-label">
+            TIME
+          </div>
 
+          <div class="route-result-value">
+            <span id="durationValue">-</span>
+            min
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="route-result-label">
+            STEPS
+          </div>
 
           <div
-            id="resultCard"
-            class="result"
+            id="stepsValue"
+            class="route-result-value"
           >
+            -
+          </div>
 
-            <div class="result-title">
-              今日のルート
-            </div>
-
-
-            <div class="result-metrics">
-
-              <div class="result-item">
-
-                <div class="result-label">
-                  DISTANCE
-                </div>
-
-                <div class="result-value">
-                  <span id="distanceValue">
-                    -
-                  </span>
-                  km
-                </div>
-
-              </div>
+        </div>
 
 
-              <div class="result-item">
+        <div>
 
-                <div class="result-label">
-                  TIME
-                </div>
+          <div class="route-result-label">
+            ENERGY
+          </div>
 
-                <div class="result-value">
-                  <span id="durationValue">
-                    -
-                  </span>
-                  min
-                </div>
-
-              </div>
-
-
-              <div class="result-item">
-
-                <div class="result-label">
-                  STEPS
-                </div>
-
-                <div class="result-value">
-                  <span id="stepsValue">
-                    -
-                  </span>
-                </div>
-
-              </div>
-
-
-              <div class="result-item">
-
-                <div class="result-label">
-                  ENERGY
-                </div>
-
-                <div class="result-value">
-                  <span id="calorieValue">
-                    -
-                  </span>
-                  kcal
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <div
-              id="resultFood"
-              class="result-food"
-            >
-              おにぎり 0.0個分
-            </div>
-
-
-            <button
-              id="recordButton"
-              class="record-button"
-            >
-              この散歩を記録
-            </button>
-
+          <div class="route-result-value">
+            <span id="calorieValue">-</span>
+            kcal
           </div>
 
         </div>
 
       </div>
 
-    </section>
+
+      <div class="route-actions">
+
+        <button
+          id="anotherRouteButton"
+          class="result-button"
+        >
+          別のコース
+        </button>
+
+        <button
+          id="recordButton"
+          class="result-button primary"
+        >
+          記録する
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="walk-controls">
+
+    <div class="quick-controls">
+
+      <select
+        id="timeSelect"
+        class="quick-select"
+      >
+
+        <option value="15">
+          15分
+        </option>
+
+        <option
+          value="30"
+          selected
+        >
+          30分
+        </option>
+
+        <option value="45">
+          45分
+        </option>
+
+        <option value="60">
+          60分
+        </option>
+
+      </select>
+
+
+      <select
+        id="pace"
+        class="quick-select"
+      >
+
+        <option value="3.5">
+          ゆっくり
+        </option>
+
+        <option
+          value="4.5"
+          selected
+        >
+          普通
+        </option>
+
+        <option value="5.5">
+          早歩き
+        </option>
+
+      </select>
+
+
+      <button
+        id="generateButton"
+        class="quick-button route-button"
+      >
+        コース作成
+      </button>
+
+    </div>
+
+
+    <div class="walk-secondary">
+
+      <button
+        id="locationButton"
+        class="text-button"
+      >
+        現在地を使う
+      </button>
+
+      <div
+        id="loading"
+        class="loading"
+      >
+        ROUTE GENERATING
+      </div>
+
+    </div>
 
   </div>
 
 </section>
 
 
-<!-- RECORDS -->
+<!-- ======================================================
+     RECORD
+====================================================== -->
 
 <section
-  id="recordsPage"
+  id="recordPage"
   class="page"
 >
 
-  <div class="page-content">
+  <div class="page-title-row">
 
-    <section class="section">
+    <div class="page-title">
+      記録
+    </div>
 
-      <div class="section-heading">
+    <div class="page-meta">
+      PROGRESS
+    </div>
 
-        <div class="section-title">
-          記録
-        </div>
+  </div>
 
-        <div class="section-note">
-          WEEK / MONTH
+
+  <div class="record-layout">
+
+    <!-- PHOTO -->
+
+    <div class="motivation">
+
+      <div
+        id="photoFrame"
+        class="photo-frame"
+      >
+
+        <img
+          id="motivationImage"
+          alt="モチベーション写真"
+        >
+
+
+        <div class="photo-placeholder">
+
+          <div class="photo-placeholder-title">
+            MOTIVATION
+          </div>
+
+          <div class="photo-placeholder-text">
+            目標にしたい自分の写真を設定できます。
+          </div>
+
         </div>
 
       </div>
 
 
-      <div class="period-grid">
+      <input
+        id="photoInput"
+        type="file"
+        accept="image/*"
+      >
 
-        <div class="period-item">
 
-          <div class="period-label">
-            今週の距離
-          </div>
+      <div class="photo-actions">
 
-          <div class="period-value">
-            <span id="weekDistance">
-              0.0
-            </span>
+        <button
+          id="photoSelectButton"
+          class="photo-button"
+        >
+          写真を設定
+        </button>
+
+        <button
+          id="photoDeleteButton"
+          class="photo-button delete"
+        >
+          削除
+        </button>
+
+      </div>
+
+
+      <div class="motivation-caption">
+
+        <div class="motivation-label">
+          YOUR MOTIVATION
+        </div>
+
+        <div class="motivation-text">
+          目標を忘れない。
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DATA -->
+
+    <div class="record-data">
+
+      <div class="month-big">
+
+        <div class="month-label">
+          THIS MONTH
+        </div>
+
+        <div class="month-number">
+
+          <span id="monthDistance">
+            0.0
+          </span>
+
+          <span>
             km
-          </div>
+          </span>
 
         </div>
 
+      </div>
 
-        <div class="period-item">
 
-          <div class="period-label">
-            今週の消費
+      <div class="month-stats">
+
+        <div class="month-stat">
+
+          <div class="month-stat-label">
+            ENERGY
           </div>
 
-          <div class="period-value">
-            <span id="weekCalories">
-              0
-            </span>
-            kcal
-          </div>
+          <div class="month-stat-value">
 
-        </div>
-
-
-        <div class="period-item">
-
-          <div class="period-label">
-            今月の距離
-          </div>
-
-          <div class="period-value">
-            <span id="monthDistance">
-              0.0
-            </span>
-            km
-          </div>
-
-        </div>
-
-
-        <div class="period-item">
-
-          <div class="period-label">
-            今月の消費
-          </div>
-
-          <div class="period-value">
             <span id="monthCalories">
               0
             </span>
+
             kcal
+
+          </div>
+
+        </div>
+
+
+        <div class="month-stat">
+
+          <div class="month-stat-label">
+            WALKS
+          </div>
+
+          <div class="month-stat-value">
+
+            <span id="monthWalks">
+              0
+            </span>
+
+            回
+
           </div>
 
         </div>
 
       </div>
 
-    </section>
 
+      <div class="month-food">
 
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div class="section-title">
-          今月の成果
+        <div class="month-stat-label">
+          MONTHLY RESULT
         </div>
 
-      </div>
-
-
-      <div class="conversion">
-
-        <div class="conversion-kcal">
-
-          MONTH /
-          <span id="monthConversionCalories">
-            0
-          </span>
-          kcal
-
-        </div>
-
-
-        <div class="conversion-main">
+        <div class="month-food-main">
 
           ラーメン
-          <strong id="monthRamen">
+
+          <span id="monthRamen">
             0.0
-          </strong>
-          <span>
-            杯分
           </span>
 
-        </div>
-
-
-        <div class="conversion-grid">
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              おにぎり
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="monthRiceBall">
-                0.0
-              </span>
-              個
-            </div>
-
-          </div>
-
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              バナナ
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="monthBanana">
-                0.0
-              </span>
-              本
-            </div>
-
-          </div>
-
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              ケーキ
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="monthCake">
-                0.0
-              </span>
-              個
-            </div>
-
-          </div>
-
-
-          <div class="conversion-item">
-
-            <div class="conversion-food-name">
-              ハンバーガー
-            </div>
-
-            <div class="conversion-food-number">
-              <span id="monthBurger">
-                0.0
-              </span>
-              個
-            </div>
-
-          </div>
+          杯分
 
         </div>
 
       </div>
 
-    </section>
 
-
-    <section class="section">
-
-      <div class="section-heading">
-
-        <div class="section-title">
-          最近の散歩
-        </div>
-
+      <div class="history-title">
+        最近の散歩
       </div>
 
 
@@ -1792,123 +1856,121 @@
         class="history-list"
       ></div>
 
-
-      <button
-        id="clearHistoryButton"
-        class="delete-button"
-      >
-        すべての記録を削除
-      </button>
-
-    </section>
+    </div>
 
   </div>
 
 </section>
 
 
-<!-- SETTINGS -->
+<!-- ======================================================
+     SETTINGS
+====================================================== -->
 
 <section
   id="settingsPage"
   class="page"
 >
 
-  <div class="page-content">
+  <div class="page-title-row">
 
-    <section class="section">
+    <div class="page-title">
+      設定
+    </div>
 
-      <div class="section-heading">
+    <div class="page-meta">
+      PROFILE
+    </div>
 
-        <div class="section-title">
-          プロフィール
-        </div>
+  </div>
 
+
+  <div class="settings">
+
+    <div class="setting-row">
+
+      <div class="setting-label">
+        年齢
       </div>
 
-
-      <div class="settings-form">
-
-        <div class="setting-row">
-
-          <div class="setting-label">
-            年齢
-          </div>
-
-          <input
-            id="ageInput"
-            type="number"
-            placeholder="30"
-          >
-
-        </div>
-
-
-        <div class="setting-row">
-
-          <div class="setting-label">
-            身長
-          </div>
-
-          <input
-            id="heightInput"
-            type="number"
-            placeholder="170 cm"
-          >
-
-        </div>
-
-
-        <div class="setting-row">
-
-          <div class="setting-label">
-            体重
-          </div>
-
-          <input
-            id="weightInput"
-            type="number"
-            step="0.1"
-            placeholder="65 kg"
-          >
-
-        </div>
-
-      </div>
-
-
-      <button
-        id="profileSaveButton"
-        class="save-button"
+      <input
+        id="ageInput"
+        class="setting-input"
+        type="number"
+        placeholder="30"
       >
-        保存
-      </button>
+
+    </div>
 
 
-      <div
-        id="profileStatus"
-        class="profile-status"
-      ></div>
+    <div class="setting-row">
 
-
-      <div class="future-note">
-
-        日常移動の自動記録は、将来のアプリ版で
-        iPhoneのHealthKit / AndroidのHealth Connectと
-        連携して追加する予定です。
-
-        現在のWeb版では、SANPO上で記録した散歩のみを集計します。
-
+      <div class="setting-label">
+        身長
       </div>
 
-    </section>
+      <input
+        id="heightInput"
+        class="setting-input"
+        type="number"
+        placeholder="170 cm"
+      >
+
+    </div>
+
+
+    <div class="setting-row">
+
+      <div class="setting-label">
+        体重
+      </div>
+
+      <input
+        id="weightInput"
+        class="setting-input"
+        type="number"
+        step="0.1"
+        placeholder="65 kg"
+      >
+
+    </div>
+
+  </div>
+
+
+  <button
+    id="profileSaveButton"
+    class="save-profile"
+  >
+    保存
+  </button>
+
+
+  <div
+    id="profileStatus"
+    class="profile-status"
+  ></div>
+
+
+  <div class="future-setting">
+
+    <div class="future-title">
+      日常活動
+    </div>
+
+    <div class="future-text">
+      将来のアプリ版では、HealthKit / Health Connectとの連携によって、
+      SANPOを起動していない時間の歩数や日常移動もまとめて表示する予定です。
+    </div>
 
   </div>
 
 </section>
 
 
-<!-- NAV -->
+<!-- ======================================================
+     NAVIGATION
+====================================================== -->
 
 <nav class="bottom-nav">
 
@@ -1947,7 +2009,7 @@
 
   <button
     class="nav-button"
-    data-page="recordsPage"
+    data-page="recordPage"
   >
 
     <svg viewBox="0 0 24 24">
@@ -1981,14 +2043,16 @@
 </div>
 
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
 
 <script>
 
-/* ========================================
-   CONSTANTS
-======================================== */
+/* =========================================================
+   STORAGE
+========================================================= */
 
 const PROFILE_KEY =
   "sanpo_profile_v1";
@@ -1996,31 +2060,59 @@ const PROFILE_KEY =
 const HISTORY_KEY =
   "sanpo_history_v1";
 
+const PHOTO_KEY =
+  "sanpo_motivation_photo_v1";
+
 
 const FOOD = {
-
-  rice:
-    180,
-
-  banana:
-    90,
-
-  cake:
-    350,
-
-  ramen:
-    600,
-
-  burger:
-    500
-
+  rice: 180,
+  banana: 90,
+  cake: 350,
+  ramen: 600
 };
 
 
+/* =========================================================
+   DATE
+========================================================= */
 
-/* ========================================
-   NAV
-======================================== */
+function updateDate() {
+
+  const now =
+    new Date();
+
+
+  const header =
+    now.toLocaleDateString(
+      "ja-JP",
+      {
+        month: "numeric",
+        day: "numeric",
+        weekday: "short"
+      }
+    );
+
+
+  document.getElementById(
+    "headerDate"
+  ).textContent =
+    header;
+
+
+  document.getElementById(
+    "homeDate"
+  ).textContent =
+    header;
+
+}
+
+
+updateDate();
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 document
   .querySelectorAll(
@@ -2081,12 +2173,6 @@ document
           );
 
 
-          window.scrollTo(
-            0,
-            0
-          );
-
-
           if (
             pageId ===
             "walkPage"
@@ -2098,7 +2184,7 @@ document
                 map.invalidateSize();
 
               },
-              150
+              120
             );
 
           }
@@ -2110,48 +2196,28 @@ document
   );
 
 
-
-/* ========================================
+/* =========================================================
    PROFILE
-======================================== */
+========================================================= */
 
 function getProfile() {
-
-  const raw =
-    localStorage.getItem(
-      PROFILE_KEY
-    );
-
-
-  if (!raw) {
-
-    return {
-      age: null,
-      height: null,
-      weight: null
-    };
-
-  }
-
 
   try {
 
     return JSON.parse(
-      raw
-    );
+      localStorage.getItem(
+        PROFILE_KEY
+      )
+    ) || {};
 
-  } catch {
+  }
+  catch {
 
-    return {
-      age: null,
-      height: null,
-      weight: null
-    };
+    return {};
 
   }
 
 }
-
 
 
 function loadProfile() {
@@ -2190,7 +2256,6 @@ function loadProfile() {
   }
 
 }
-
 
 
 function saveProfile() {
@@ -2259,46 +2324,34 @@ function saveProfile() {
         "";
 
     },
-    2000
+    1800
   );
 
 }
 
 
-
-/* ========================================
+/* =========================================================
    HISTORY
-======================================== */
+========================================================= */
 
 function getHistory() {
-
-  const raw =
-    localStorage.getItem(
-      HISTORY_KEY
-    );
-
-
-  if (!raw) {
-
-    return [];
-
-  }
-
 
   try {
 
     return JSON.parse(
-      raw
-    );
+      localStorage.getItem(
+        HISTORY_KEY
+      )
+    ) || [];
 
-  } catch {
+  }
+  catch {
 
     return [];
 
   }
 
 }
-
 
 
 function saveHistory(
@@ -2315,17 +2368,266 @@ function saveHistory(
 }
 
 
+/* =========================================================
+   PHOTO
+========================================================= */
 
-/* ========================================
+const photoInput =
+  document.getElementById(
+    "photoInput"
+  );
+
+const photoFrame =
+  document.getElementById(
+    "photoFrame"
+  );
+
+const motivationImage =
+  document.getElementById(
+    "motivationImage"
+  );
+
+
+function loadPhoto() {
+
+  const image =
+    localStorage.getItem(
+      PHOTO_KEY
+    );
+
+
+  if (image) {
+
+    motivationImage.src =
+      image;
+
+    photoFrame.classList.add(
+      "has-image"
+    );
+
+  }
+
+}
+
+
+document
+  .getElementById(
+    "photoSelectButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      photoInput.click();
+
+    }
+  );
+
+
+photoInput.addEventListener(
+  "change",
+  event => {
+
+    const file =
+      event.target.files[0];
+
+
+    if (!file) {
+
+      return;
+
+    }
+
+
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
+
+      alert(
+        "画像ファイルを選んでください。"
+      );
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function(e) {
+
+        const image =
+          new Image();
+
+
+        image.onload =
+          function() {
+
+            const maxSize =
+              1000;
+
+
+            let width =
+              image.width;
+
+            let height =
+              image.height;
+
+
+            if (
+              width >
+              height
+            ) {
+
+              if (
+                width >
+                maxSize
+              ) {
+
+                height *=
+                  maxSize /
+                  width;
+
+                width =
+                  maxSize;
+
+              }
+
+            }
+            else {
+
+              if (
+                height >
+                maxSize
+              ) {
+
+                width *=
+                  maxSize /
+                  height;
+
+                height =
+                  maxSize;
+
+              }
+
+            }
+
+
+            const canvas =
+              document.createElement(
+                "canvas"
+              );
+
+
+            canvas.width =
+              width;
+
+            canvas.height =
+              height;
+
+
+            const context =
+              canvas.getContext(
+                "2d"
+              );
+
+
+            context.drawImage(
+              image,
+              0,
+              0,
+              width,
+              height
+            );
+
+
+            const compressed =
+              canvas.toDataURL(
+                "image/jpeg",
+                .78
+              );
+
+
+            try {
+
+              localStorage.setItem(
+                PHOTO_KEY,
+                compressed
+              );
+
+
+              motivationImage.src =
+                compressed;
+
+
+              photoFrame.classList.add(
+                "has-image"
+              );
+
+            }
+            catch {
+
+              alert(
+                "画像を保存できませんでした。別の写真を試してください。"
+              );
+
+            }
+
+          };
+
+
+        image.src =
+          e.target.result;
+
+      };
+
+
+    reader.readAsDataURL(
+      file
+    );
+
+  }
+);
+
+
+document
+  .getElementById(
+    "photoDeleteButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      localStorage.removeItem(
+        PHOTO_KEY
+      );
+
+
+      motivationImage.removeAttribute(
+        "src"
+      );
+
+
+      photoFrame.classList.remove(
+        "has-image"
+      );
+
+
+      photoInput.value =
+        "";
+
+    }
+  );
+
+
+/* =========================================================
    MAP
-======================================== */
-
-const defaultLat =
-  35.681236;
-
-const defaultLng =
-  139.767125;
-
+========================================================= */
 
 let startPoint =
   null;
@@ -2339,9 +2641,6 @@ let routeShadow =
 let routeLayer =
   null;
 
-let selectedTime =
-  30;
-
 let currentWalk =
   null;
 
@@ -2350,22 +2649,20 @@ const map =
   L.map(
     "map",
     {
-      zoomControl:
-        false
+      zoomControl: false
     }
   )
   .setView(
     [
-      defaultLat,
-      defaultLng
+      35.681236,
+      139.767125
     ],
     14
   );
 
 
 L.control.zoom({
-  position:
-    "bottomright"
+  position: "bottomright"
 }).addTo(
   map
 );
@@ -2374,11 +2671,8 @@ L.control.zoom({
 L.tileLayer(
   "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
   {
-    maxZoom:
-      20,
-
-    subdomains:
-      "abcd",
+    maxZoom: 20,
+    subdomains: "abcd",
 
     attribution:
       '&copy; OpenStreetMap contributors &copy; CARTO'
@@ -2399,13 +2693,12 @@ const startIcon =
       '<div class="start-marker"></div>',
 
     iconSize:
-      [26,26],
+      [24,24],
 
     iconAnchor:
-      [13,13]
+      [12,12]
 
   });
-
 
 
 map.on(
@@ -2419,7 +2712,6 @@ map.on(
 
   }
 );
-
 
 
 function setStartPoint(
@@ -2469,27 +2761,17 @@ function setStartPoint(
   );
 
 
-  const status =
-    document.getElementById(
-      "locationStatus"
-    );
-
-
-  status.textContent =
-    "スタート地点を設定しました。";
-
-
-  status.classList.add(
-    "active"
-  );
+  document.getElementById(
+    "mapMessage"
+  ).textContent =
+    "スタート地点を設定しました";
 
 }
 
 
-
-/* ========================================
-   LOCATION
-======================================== */
+/* =========================================================
+   CURRENT LOCATION
+========================================================= */
 
 document
   .getElementById(
@@ -2497,14 +2779,14 @@ document
   )
   .addEventListener(
     "click",
-    function() {
+    () => {
 
       if (
         !navigator.geolocation
       ) {
 
         alert(
-          "現在地を取得できません。"
+          "現在地取得に対応していません。"
         );
 
         return;
@@ -2512,16 +2794,10 @@ document
       }
 
 
-      const button =
-        this;
-
-
-      button.disabled =
-        true;
-
-
-      button.textContent =
-        "位置情報を取得中";
+      document.getElementById(
+        "mapMessage"
+      ).textContent =
+        "現在地を取得中";
 
 
       navigator.geolocation
@@ -2534,14 +2810,6 @@ document
               position.coords.longitude
             );
 
-
-            button.textContent =
-              "現在地を設定済み";
-
-
-            button.disabled =
-              false;
-
           },
 
           () => {
@@ -2551,12 +2819,10 @@ document
             );
 
 
-            button.textContent =
-              "現在地を使用";
-
-
-            button.disabled =
-              false;
+            document.getElementById(
+              "mapMessage"
+            ).textContent =
+              "地図をタップしてスタート地点を設定";
 
           }
 
@@ -2566,58 +2832,9 @@ document
   );
 
 
-
-/* ========================================
-   TIME
-======================================== */
-
-document
-  .querySelectorAll(
-    ".time-button"
-  )
-  .forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        function() {
-
-          document
-            .querySelectorAll(
-              ".time-button"
-            )
-            .forEach(
-              btn => {
-
-                btn.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-
-          this.classList.add(
-            "active"
-          );
-
-
-          selectedTime =
-            Number(
-              this.dataset.time
-            );
-
-        }
-      );
-
-    }
-  );
-
-
-
-/* ========================================
-   ROUTE MATH
-======================================== */
+/* =========================================================
+   ROUTE HELPERS
+========================================================= */
 
 function destinationPoint(
   lat,
@@ -2656,30 +2873,17 @@ function destinationPoint(
   const lat2 =
     Math.asin(
 
-      Math.sin(
-        lat1
-      )
-
-      *
-
+      Math.sin(lat1) *
       Math.cos(
         angularDistance
       )
 
       +
 
-      Math.cos(
-        lat1
-      )
-
-      *
-
+      Math.cos(lat1) *
       Math.sin(
         angularDistance
-      )
-
-      *
-
+      ) *
       Math.cos(
         bearing
       )
@@ -2694,16 +2898,10 @@ function destinationPoint(
 
       Math.sin(
         bearing
-      )
-
-      *
-
+      ) *
       Math.sin(
         angularDistance
-      )
-
-      *
-
+      ) *
       Math.cos(
         lat1
       ),
@@ -2714,12 +2912,7 @@ function destinationPoint(
 
       -
 
-      Math.sin(
-        lat1
-      )
-
-      *
-
+      Math.sin(lat1) *
       Math.sin(
         lat2
       )
@@ -2742,7 +2935,6 @@ function destinationPoint(
   };
 
 }
-
 
 
 function createWaypoints(
@@ -2823,24 +3015,13 @@ function createWaypoints(
 }
 
 
-
-/* ========================================
-   POLYLINE
-======================================== */
-
 function decodePolyline6(
   encoded
 ) {
 
-  let index =
-    0;
-
-  let lat =
-    0;
-
-  let lng =
-    0;
-
+  let index = 0;
+  let lat = 0;
+  let lng = 0;
 
   const coordinates =
     [];
@@ -2851,12 +3032,8 @@ function decodePolyline6(
     encoded.length
   ) {
 
-    let result =
-      0;
-
-    let shift =
-      0;
-
+    let result = 0;
+    let shift = 0;
     let byte;
 
 
@@ -2872,13 +3049,10 @@ function decodePolyline6(
         (
           byte &
           0x1f
-        )
-        <<
-        shift;
+        ) << shift;
 
 
-      shift +=
-        5;
+      shift += 5;
 
     }
     while (
@@ -2889,24 +3063,18 @@ function decodePolyline6(
 
     lat +=
       (
-        result &
-        1
+        result & 1
       )
-      ?
-      ~(
-        result >>
-        1
-      )
-      :
-      result >>
-      1;
+        ?
+        ~(
+          result >> 1
+        )
+        :
+        result >> 1;
 
 
-    result =
-      0;
-
-    shift =
-      0;
+    result = 0;
+    shift = 0;
 
 
     do {
@@ -2921,13 +3089,10 @@ function decodePolyline6(
         (
           byte &
           0x1f
-        )
-        <<
-        shift;
+        ) << shift;
 
 
-      shift +=
-        5;
+      shift += 5;
 
     }
     while (
@@ -2938,26 +3103,20 @@ function decodePolyline6(
 
     lng +=
       (
-        result &
-        1
+        result & 1
       )
-      ?
-      ~(
-        result >>
-        1
-      )
-      :
-      result >>
-      1;
+        ?
+        ~(
+          result >> 1
+        )
+        :
+        result >> 1;
 
 
     coordinates.push(
       [
-        lat /
-        1e6,
-
-        lng /
-        1e6
+        lat / 1e6,
+        lng / 1e6
       ]
     );
 
@@ -2967,7 +3126,6 @@ function decodePolyline6(
   return coordinates;
 
 }
-
 
 
 function clearRoute() {
@@ -2997,17 +3155,15 @@ function clearRoute() {
   routeShadow =
     null;
 
-
   routeLayer =
     null;
 
 }
 
 
-
-/* ========================================
+/* =========================================================
    CALCULATIONS
-======================================== */
+========================================================= */
 
 function calculateSteps(
   distanceKm
@@ -3034,15 +3190,12 @@ function calculateSteps(
 
 
   return Math.round(
-
     distanceKm *
     1000 /
     stride
-
   );
 
 }
-
 
 
 function calculateCalories(
@@ -3099,10 +3252,9 @@ function calculateCalories(
 }
 
 
-
-/* ========================================
-   ROUTE
-======================================== */
+/* =========================================================
+   GENERATE ROUTE
+========================================================= */
 
 async function generateRoute() {
 
@@ -3111,7 +3263,7 @@ async function generateRoute() {
   ) {
 
     alert(
-      "スタート地点を設定してください。"
+      "まずスタート地点を設定してください。"
     );
 
     return;
@@ -3145,6 +3297,14 @@ async function generateRoute() {
 
   try {
 
+    const selectedTime =
+      Number(
+        document.getElementById(
+          "timeSelect"
+        ).value
+      );
+
+
     const speed =
       Number(
         document.getElementById(
@@ -3173,8 +3333,7 @@ async function generateRoute() {
       await fetch(
         "https://valhalla1.openstreetmap.de/route",
         {
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
             "Content-Type":
@@ -3205,7 +3364,7 @@ async function generateRoute() {
     ) {
 
       throw new Error(
-        "Route Error"
+        "route error"
       );
 
     }
@@ -3225,11 +3384,9 @@ async function generateRoute() {
 
           coordinates =
             coordinates.concat(
-
               decodePolyline6(
                 leg.shape
               )
-
             );
 
         }
@@ -3240,20 +3397,11 @@ async function generateRoute() {
       L.polyline(
         coordinates,
         {
-          color:
-            "#ffffff",
-
-          weight:
-            10,
-
-          opacity:
-            .9,
-
-          lineCap:
-            "round",
-
-          lineJoin:
-            "round"
+          color: "#ffffff",
+          weight: 10,
+          opacity: .9,
+          lineCap: "round",
+          lineJoin: "round"
         }
       )
       .addTo(
@@ -3265,20 +3413,11 @@ async function generateRoute() {
       L.polyline(
         coordinates,
         {
-          color:
-            "#315f4d",
-
-          weight:
-            5,
-
-          opacity:
-            1,
-
-          lineCap:
-            "round",
-
-          lineJoin:
-            "round"
+          color: "#315f4d",
+          weight: 5,
+          opacity: 1,
+          lineCap: "round",
+          lineJoin: "round"
         }
       )
       .addTo(
@@ -3290,10 +3429,7 @@ async function generateRoute() {
       routeLayer.getBounds(),
       {
         padding:
-          [
-            45,
-            45
-          ]
+          [40,40]
       }
     );
 
@@ -3325,16 +3461,14 @@ async function generateRoute() {
 
 
     currentWalk = {
-
       distance,
       duration,
       steps,
       calories
-
     };
 
 
-    showResult(
+    showRouteResult(
       currentWalk
     );
 
@@ -3368,12 +3502,11 @@ async function generateRoute() {
 }
 
 
-
-/* ========================================
+/* =========================================================
    RESULT
-======================================== */
+========================================================= */
 
-function showResult(
+function showRouteResult(
   walk
 ) {
 
@@ -3405,52 +3538,33 @@ function showResult(
 
 
   document.getElementById(
-    "resultFood"
-  ).textContent =
-
-    "おにぎり " +
-
-    (
-      walk.calories /
-      FOOD.rice
-    ).toFixed(
-      1
-    )
-
-    +
-
-    "個分";
-
-
-  document.getElementById(
-    "resultCard"
+    "routeResult"
   ).classList.add(
     "show"
   );
 
 
-  const recordButton =
+  const button =
     document.getElementById(
       "recordButton"
     );
 
 
-  recordButton.disabled =
+  button.disabled =
     false;
 
 
-  recordButton.textContent =
-    "この散歩を記録";
+  button.textContent =
+    "記録する";
 
 }
 
 
+/* =========================================================
+   RECORD
+========================================================= */
 
-/* ========================================
-   RECORD WALK
-======================================== */
-
-function recordCurrentWalk() {
+function recordWalk() {
 
   if (
     !currentWalk
@@ -3494,10 +3608,9 @@ function recordCurrentWalk() {
   );
 
 
-  renderHistory();
-
-
   updateStats();
+
+  renderHistory();
 
 
   const button =
@@ -3516,10 +3629,9 @@ function recordCurrentWalk() {
 }
 
 
-
-/* ========================================
+/* =========================================================
    PERIOD
-======================================== */
+========================================================= */
 
 function isToday(
   date
@@ -3530,24 +3642,21 @@ function isToday(
 
 
   return (
-
     date.getFullYear() ===
-    now.getFullYear()
+      now.getFullYear()
 
     &&
 
     date.getMonth() ===
-    now.getMonth()
+      now.getMonth()
 
     &&
 
     date.getDate() ===
-    now.getDate()
-
+      now.getDate()
   );
 
 }
-
 
 
 function startOfWeek() {
@@ -3573,17 +3682,9 @@ function startOfWeek() {
     +
 
     (
-      day ===
-      0
-
-      ?
-
-      -6
-
-      :
-
-      1 -
-      day
+      day === 0
+        ? -6
+        : 1 - day
     )
 
   );
@@ -3602,10 +3703,9 @@ function startOfWeek() {
 }
 
 
-
-/* ========================================
+/* =========================================================
    STATS
-======================================== */
+========================================================= */
 
 function updateStats() {
 
@@ -3621,31 +3721,16 @@ function updateStats() {
     startOfWeek();
 
 
-  let todayDistance =
-    0;
+  let todayDistance = 0;
+  let todaySteps = 0;
+  let todayCalories = 0;
+  let todayMinutes = 0;
 
-  let todaySteps =
-    0;
+  let weekDistance = 0;
 
-  let todayCalories =
-    0;
-
-  let todayMinutes =
-    0;
-
-
-  let weekDistance =
-    0;
-
-  let weekCalories =
-    0;
-
-
-  let monthDistance =
-    0;
-
-  let monthCalories =
-    0;
+  let monthDistance = 0;
+  let monthCalories = 0;
+  let monthWalks = 0;
 
 
   history.forEach(
@@ -3699,25 +3784,17 @@ function updateStats() {
             item.distance
           );
 
-
-        weekCalories +=
-          Number(
-            item.calories
-          );
-
       }
 
 
       if (
-
         date.getFullYear() ===
-        now.getFullYear()
+          now.getFullYear()
 
         &&
 
         date.getMonth() ===
-        now.getMonth()
-
+          now.getMonth()
       ) {
 
         monthDistance +=
@@ -3730,6 +3807,9 @@ function updateStats() {
           Number(
             item.calories
           );
+
+
+        monthWalks++;
 
       }
 
@@ -3770,26 +3850,10 @@ function updateStats() {
 
 
   document.getElementById(
-    "sanpoActivitySteps"
-  ).textContent =
-    Math.round(
-      todaySteps
-    ).toLocaleString();
-
-
-  document.getElementById(
     "weekDistance"
   ).textContent =
     weekDistance.toFixed(
       1
-    );
-
-
-  document.getElementById(
-    "weekCalories"
-  ).textContent =
-    Math.round(
-      weekCalories
     );
 
 
@@ -3809,27 +3873,88 @@ function updateStats() {
     );
 
 
-  updateConversions(
-    todayCalories,
-    monthCalories
-  );
+  document.getElementById(
+    "monthWalks"
+  ).textContent =
+    monthWalks;
+
+
+  document.getElementById(
+    "todayRice"
+  ).textContent =
+    foodAmount(
+      todayCalories,
+      FOOD.rice
+    );
+
+
+  document.getElementById(
+    "todayBanana"
+  ).textContent =
+    foodAmount(
+      todayCalories,
+      FOOD.banana
+    );
+
+
+  document.getElementById(
+    "todayCake"
+  ).textContent =
+    foodAmount(
+      todayCalories,
+      FOOD.cake
+    );
+
+
+  document.getElementById(
+    "todayRamen"
+  ).textContent =
+    foodAmount(
+      todayCalories,
+      FOOD.ramen
+    );
+
+
+  document.getElementById(
+    "monthRamen"
+  ).textContent =
+    foodAmount(
+      monthCalories,
+      FOOD.ramen
+    );
+
+
+  const weeklyGoal =
+    20;
+
+
+  const percentage =
+    Math.min(
+      100,
+      (
+        weekDistance /
+        weeklyGoal
+      ) *
+      100
+    );
+
+
+  document.getElementById(
+    "weekProgressBar"
+  ).style.width =
+    percentage +
+    "%";
 
 }
 
 
-
-/* ========================================
-   FOOD CONVERSIONS
-======================================== */
-
-function amount(
+function foodAmount(
   calories,
-  kcal
+  foodCalories
 ) {
 
   if (
-    calories <=
-    0
+    !calories
   ) {
 
     return "0.0";
@@ -3839,7 +3964,7 @@ function amount(
 
   return (
     calories /
-    kcal
+    foodCalories
   ).toFixed(
     1
   );
@@ -3847,124 +3972,9 @@ function amount(
 }
 
 
-
-function updateConversions(
-  today,
-  month
-) {
-
-  document.getElementById(
-    "conversionCalories"
-  ).textContent =
-    Math.round(
-      today
-    );
-
-
-  document.getElementById(
-    "todayRiceMain"
-  ).textContent =
-    amount(
-      today,
-      FOOD.rice
-    );
-
-
-  document.getElementById(
-    "todayBanana"
-  ).textContent =
-    amount(
-      today,
-      FOOD.banana
-    );
-
-
-  document.getElementById(
-    "todayCake"
-  ).textContent =
-    amount(
-      today,
-      FOOD.cake
-    );
-
-
-  document.getElementById(
-    "todayRamen"
-  ).textContent =
-    amount(
-      today,
-      FOOD.ramen
-    );
-
-
-  document.getElementById(
-    "todayBurger"
-  ).textContent =
-    amount(
-      today,
-      FOOD.burger
-    );
-
-
-  document.getElementById(
-    "monthConversionCalories"
-  ).textContent =
-    Math.round(
-      month
-    );
-
-
-  document.getElementById(
-    "monthRamen"
-  ).textContent =
-    amount(
-      month,
-      FOOD.ramen
-    );
-
-
-  document.getElementById(
-    "monthRiceBall"
-  ).textContent =
-    amount(
-      month,
-      FOOD.rice
-    );
-
-
-  document.getElementById(
-    "monthBanana"
-  ).textContent =
-    amount(
-      month,
-      FOOD.banana
-    );
-
-
-  document.getElementById(
-    "monthCake"
-  ).textContent =
-    amount(
-      month,
-      FOOD.cake
-    );
-
-
-  document.getElementById(
-    "monthBurger"
-  ).textContent =
-    amount(
-      month,
-      FOOD.burger
-    );
-
-}
-
-
-
-/* ========================================
-   HISTORY
-======================================== */
+/* =========================================================
+   HISTORY UI
+========================================================= */
 
 function renderHistory() {
 
@@ -3990,7 +4000,7 @@ function renderHistory() {
     container.innerHTML =
       `
       <div class="empty">
-        まだ散歩記録はありません。
+        まだ記録はありません。
       </div>
       `;
 
@@ -4002,7 +4012,7 @@ function renderHistory() {
   history
     .slice(
       0,
-      12
+      8
     )
     .forEach(
       item => {
@@ -4013,64 +4023,42 @@ function renderHistory() {
           );
 
 
-        const div =
+        const row =
           document.createElement(
             "div"
           );
 
 
-        div.className =
+        row.className =
           "history-item";
 
 
-        div.innerHTML =
+        row.innerHTML =
           `
-
           <div class="history-date">
-
             ${
               date.toLocaleDateString(
                 "ja-JP",
                 {
-                  month:
-                    "numeric",
-
-                  day:
-                    "numeric",
-
-                  weekday:
-                    "short"
+                  month: "numeric",
+                  day: "numeric"
                 }
               )
             }
-
           </div>
 
-          <div class="history-value">
-            <span>距離</span>
+          <div class="history-sub">
             ${Number(item.distance).toFixed(1)} km
           </div>
 
-          <div class="history-value">
-            <span>時間</span>
-            ${item.duration} min
-          </div>
-
-          <div class="history-value">
-            <span>歩数</span>
-            ${Number(item.steps).toLocaleString()}
-          </div>
-
-          <div class="history-value">
-            <span>消費</span>
+          <div class="history-sub">
             ${item.calories} kcal
           </div>
-
           `;
 
 
         container.appendChild(
-          div
+          row
         );
 
       }
@@ -4079,51 +4067,9 @@ function renderHistory() {
 }
 
 
-
-/* ========================================
-   CLEAR HISTORY
-======================================== */
-
-function clearHistory() {
-
-  if (
-    !confirm(
-      "すべての散歩記録を削除しますか？"
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  localStorage.removeItem(
-    HISTORY_KEY
-  );
-
-
-  renderHistory();
-
-
-  updateStats();
-
-}
-
-
-
-/* ========================================
+/* =========================================================
    EVENTS
-======================================== */
-
-document
-  .getElementById(
-    "profileSaveButton"
-  )
-  .addEventListener(
-    "click",
-    saveProfile
-  );
-
+========================================================= */
 
 document
   .getElementById(
@@ -4137,7 +4083,7 @@ document
 
 document
   .getElementById(
-    "anotherButton"
+    "anotherRouteButton"
   )
   .addEventListener(
     "click",
@@ -4151,26 +4097,27 @@ document
   )
   .addEventListener(
     "click",
-    recordCurrentWalk
+    recordWalk
   );
 
 
 document
   .getElementById(
-    "clearHistoryButton"
+    "profileSaveButton"
   )
   .addEventListener(
     "click",
-    clearHistory
+    saveProfile
   );
 
 
-
-/* ========================================
+/* =========================================================
    START
-======================================== */
+========================================================= */
 
 loadProfile();
+
+loadPhoto();
 
 renderHistory();
 
