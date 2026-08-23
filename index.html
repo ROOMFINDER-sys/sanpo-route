@@ -4,13 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>SANPO | 散歩コースメーカー</title>
+  <title>SANPO | 散歩コースメーカー!</title>
 
   <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
 
@@ -26,11 +25,15 @@
       --green-dark: #164c3a;
       --green-light: #e8f4ee;
       --cream: #f8f7f2;
-      --text: #222;
+      --text: #222222;
       --subtext: #6a6a6a;
       --border: #e3e3df;
       --white: #ffffff;
       --shadow: 0 14px 45px rgba(0, 0, 0, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -49,7 +52,8 @@
     }
 
     button,
-    select {
+    select,
+    input {
       font: inherit;
     }
 
@@ -57,12 +61,8 @@
       cursor: pointer;
     }
 
-    /* --------------------
-       HEADER
-    -------------------- */
-
     header {
-      height: 72px;
+      min-height: 72px;
       background: rgba(255, 255, 255, 0.95);
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -101,10 +101,6 @@
       color: var(--subtext);
     }
 
-    /* --------------------
-       HERO
-    -------------------- */
-
     .hero {
       padding: 55px 6% 35px;
       max-width: 1400px;
@@ -126,7 +122,7 @@
       font-size: clamp(34px, 5vw, 62px);
       line-height: 1.15;
       letter-spacing: -0.04em;
-      max-width: 760px;
+      max-width: 850px;
     }
 
     .hero h1 span {
@@ -137,18 +133,115 @@
       color: var(--subtext);
       line-height: 1.8;
       margin-top: 18px;
-      max-width: 650px;
+      max-width: 720px;
       font-size: 15px;
     }
 
-    /* --------------------
-       MAIN
-    -------------------- */
+    .section-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 6% 28px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .section-description {
+      color: var(--subtext);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .dashboard-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .dashboard-name {
+      font-size: 12px;
+      color: var(--subtext);
+      margin-bottom: 8px;
+    }
+
+    .dashboard-value {
+      font-size: 27px;
+      font-weight: 800;
+    }
+
+    .dashboard-value small {
+      font-size: 12px;
+      margin-left: 4px;
+      font-weight: 600;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      align-items: end;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .input-group input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      padding: 13px;
+      outline: none;
+    }
+
+    .input-group input:focus {
+      border-color: var(--green);
+    }
+
+    .profile-save {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      background: var(--green);
+      color: white;
+      font-weight: 800;
+    }
+
+    .profile-status {
+      margin-top: 12px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      min-height: 18px;
+    }
 
     .main {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 6% 80px;
+      padding: 0 6% 28px;
       display: grid;
       grid-template-columns: 390px 1fr;
       gap: 24px;
@@ -185,8 +278,6 @@
       margin-bottom: 9px;
     }
 
-    /* 出発地点 */
-
     .location-box {
       background: #f7f8f6;
       border: 1px solid var(--border);
@@ -214,14 +305,7 @@
       font-weight: 700;
       padding: 12px;
       border-radius: 10px;
-      transition: 0.2s;
     }
-
-    .location-button:hover {
-      background: #d7ede2;
-    }
-
-    /* 時間 */
 
     .time-grid {
       display: grid;
@@ -236,11 +320,6 @@
       padding: 12px 4px;
       font-size: 13px;
       font-weight: 700;
-      transition: 0.2s;
-    }
-
-    .time-button:hover {
-      border-color: var(--green);
     }
 
     .time-button.active {
@@ -248,8 +327,6 @@
       color: white;
       border-color: var(--green);
     }
-
-    /* ペース */
 
     select {
       width: 100%;
@@ -259,12 +336,6 @@
       background: white;
       outline: none;
     }
-
-    select:focus {
-      border-color: var(--green);
-    }
-
-    /* チェック */
 
     .options {
       display: grid;
@@ -285,8 +356,6 @@
       accent-color: var(--green);
     }
 
-    /* Generate */
-
     .generate-button {
       width: 100%;
       border: none;
@@ -296,20 +365,13 @@
       background: var(--green);
       font-weight: 800;
       font-size: 15px;
-      transition: 0.2s;
       box-shadow: 0 8px 20px rgba(31, 107, 79, 0.2);
-    }
-
-    .generate-button:hover {
-      background: var(--green-dark);
-      transform: translateY(-1px);
     }
 
     .generate-button:disabled {
       background: #aaa;
       box-shadow: none;
       cursor: not-allowed;
-      transform: none;
     }
 
     .random-button {
@@ -323,13 +385,18 @@
       color: #444;
     }
 
-    .random-button:hover {
-      background: #f7f7f5;
+    .loading {
+      display: none;
+      margin-top: 13px;
+      color: var(--green);
+      font-size: 13px;
+      text-align: center;
+      font-weight: 700;
     }
 
-    /* --------------------
-       MAP
-    -------------------- */
+    .loading.show {
+      display: block;
+    }
 
     .map-area {
       position: relative;
@@ -359,10 +426,6 @@
       pointer-events: none;
       white-space: nowrap;
     }
-
-    /* --------------------
-       RESULT
-    -------------------- */
 
     .result-card {
       margin-top: 24px;
@@ -410,7 +473,7 @@
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
 
@@ -444,22 +507,95 @@
       line-height: 1.8;
     }
 
-    /* Loading */
+    .record-button {
+      width: 100%;
+      margin-top: 18px;
+      border: none;
+      background: #222;
+      color: white;
+      border-radius: 13px;
+      padding: 14px;
+      font-weight: 800;
+    }
 
-    .loading {
-      display: none;
-      margin-top: 13px;
-      color: var(--green);
-      font-size: 13px;
+    .record-button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .history-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 6% 70px;
+    }
+
+    .history-card {
+      background: white;
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .history-header h2 {
+      font-size: 20px;
+    }
+
+    .clear-button {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: #777;
+      font-size: 12px;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .history-empty {
+      padding: 30px;
       text-align: center;
-      font-weight: 700;
+      color: var(--subtext);
+      background: #f8f8f6;
+      border-radius: 14px;
+      font-size: 13px;
     }
 
-    .loading.show {
+    .history-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .history-date {
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .history-value {
+      font-size: 13px;
+    }
+
+    .history-value span {
       display: block;
+      color: var(--subtext);
+      font-size: 10px;
+      margin-bottom: 3px;
     }
-
-    /* notice */
 
     .notice {
       max-width: 1400px;
@@ -470,42 +606,80 @@
       line-height: 1.8;
     }
 
-    /* Mobile */
-
-    @media (max-width: 900px) {
-      header {
-        padding: 0 20px;
+    @media (max-width: 1000px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      .hero {
-        padding: 38px 20px 25px;
+      .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .main {
         grid-template-columns: 1fr;
-        padding: 0 20px 60px;
-      }
-
-      #map {
-        height: 480px;
       }
 
       .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .notice {
-        padding: 0 20px;
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 700px) {
+      header {
+        padding: 0 20px;
+      }
+
       .header-right {
         display: none;
       }
 
+      .hero,
+      .section-wrap,
+      .main,
+      .history-section,
+      .notice {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero {
+        padding-top: 38px;
+      }
+
       .hero h1 {
-        font-size: 36px;
+        font-size: 38px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      #map {
+        height: 470px;
+      }
+
+      .history-item {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .history-date {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-grid,
+      .profile-grid,
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .time-grid {
+        grid-template-columns: 1fr 1fr;
       }
 
       .panel {
@@ -521,905 +695,1238 @@
 
 <body>
 
-  <!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">歩</div>
+    SANPO
+  </div>
 
-  <header>
-    <div class="logo">
-      <div class="logo-mark">歩</div>
-      SANPO
+  <div class="header-right">
+    歩いて、記録して、続けよう。
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-label">
+    WALK & DIET
+  </div>
+
+  <h1>
+    歩いたぶんだけ、<br>
+    <span>ちゃんと残る。</span>
+  </h1>
+
+  <p>
+    散歩コースを自動でつくって、距離・時間・歩数・消費カロリーを記録。
+    毎日の散歩を、続けやすい習慣に。
+  </p>
+</section>
+
+
+<!-- 集計 -->
+
+<section class="section-wrap">
+
+  <div class="section-title">
+    あなたの記録
+  </div>
+
+  <div class="section-description">
+    この端末のブラウザに保存された散歩記録を集計しています。
+  </div>
+
+  <div class="dashboard-grid">
+
+    <div class="dashboard-card">
+      <div class="dashboard-name">今週の距離</div>
+      <div class="dashboard-value">
+        <span id="weekDistance">0.0</span>
+        <small>km</small>
+      </div>
     </div>
 
-    <div class="header-right">
-      気分にちょうどいい散歩を。
-    </div>
-  </header>
-
-
-  <!-- HERO -->
-
-  <section class="hero">
-
-    <div class="hero-label">
-      WALK ROUTE GENERATOR
+    <div class="dashboard-card">
+      <div class="dashboard-name">今週の消費</div>
+      <div class="dashboard-value">
+        <span id="weekCalories">0</span>
+        <small>kcal</small>
+      </div>
     </div>
 
-    <h1>
-      今日の気分に、<br>
-      <span>ちょうどいい散歩。</span>
-    </h1>
+    <div class="dashboard-card">
+      <div class="dashboard-name">今月の距離</div>
+      <div class="dashboard-value">
+        <span id="monthDistance">0.0</span>
+        <small>km</small>
+      </div>
+    </div>
 
-    <p>
-      出発地点と歩きたい時間を選ぶだけ。
-      いつもの街に、いつもと少し違う散歩コースをつくります。
-    </p>
+    <div class="dashboard-card">
+      <div class="dashboard-name">今月の消費</div>
+      <div class="dashboard-value">
+        <span id="monthCalories">0</span>
+        <small>kcal</small>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- プロフィール -->
+
+<section class="section-wrap">
+
+  <div class="section-title">
+    プロフィール
+  </div>
+
+  <div class="section-description">
+    身長は歩数の目安、体重は消費カロリーの目安計算に使います。
+  </div>
+
+  <div class="profile-card">
+
+    <div class="profile-grid">
+
+      <div class="input-group">
+        <label for="ageInput">年齢</label>
+        <input
+          id="ageInput"
+          type="number"
+          min="1"
+          max="120"
+          placeholder="例：30"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="heightInput">身長（cm）</label>
+        <input
+          id="heightInput"
+          type="number"
+          min="100"
+          max="230"
+          placeholder="例：170"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="weightInput">体重（kg）</label>
+        <input
+          id="weightInput"
+          type="number"
+          min="20"
+          max="300"
+          step="0.1"
+          placeholder="例：65"
+        />
+      </div>
+
+      <button
+        id="profileSaveButton"
+        class="profile-save"
+      >
+        プロフィールを保存
+      </button>
+
+    </div>
+
+    <div
+      class="profile-status"
+      id="profileStatus"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- メイン -->
+
+<main class="main">
+
+  <section class="panel">
+
+    <div class="panel-title">
+      散歩コースをつくる
+    </div>
+
+    <div class="panel-description">
+      地図をクリックするか、現在地を使ってスタート地点を決めてください。
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        1. 出発地点
+      </label>
+
+      <div class="location-box">
+
+        <div
+          class="location-status"
+          id="locationStatus"
+        >
+          地図上の好きな場所をクリックしてください
+        </div>
+
+        <button
+          class="location-button"
+          id="locationButton"
+        >
+          📍 現在地を使う
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        2. 散歩したい時間
+      </label>
+
+      <div class="time-grid">
+
+        <button class="time-button" data-time="15">
+          15分
+        </button>
+
+        <button class="time-button active" data-time="30">
+          30分
+        </button>
+
+        <button class="time-button" data-time="45">
+          45分
+        </button>
+
+        <button class="time-button" data-time="60">
+          60分
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        3. 歩くペース
+      </label>
+
+      <select id="pace">
+
+        <option value="3.5">
+          のんびり
+        </option>
+
+        <option value="4.5" selected>
+          普通
+        </option>
+
+        <option value="5.5">
+          早歩き
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        4. 今日の気分
+      </label>
+
+      <div class="options">
+
+        <label class="option">
+          <input
+            type="checkbox"
+            id="parkOption"
+            checked
+          />
+          🌳 緑のある場所を歩きたい
+        </label>
+
+        <label class="option">
+          <input
+            type="checkbox"
+            id="quietOption"
+          />
+          ☕ のんびり寄り道したい
+        </label>
+
+        <label class="option">
+          <input
+            type="checkbox"
+            id="randomOption"
+            checked
+          />
+          🎲 毎回少し違うコース
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="generateButton"
+      class="generate-button"
+    >
+      散歩コースをつくる
+    </button>
+
+    <button
+      id="anotherButton"
+      class="random-button"
+    >
+      ↻ 別のコースを考える
+    </button>
+
+    <div
+      class="loading"
+      id="loading"
+    >
+      散歩コースを考えています...
+    </div>
 
   </section>
 
 
-  <!-- MAIN -->
+  <section class="map-area">
 
-  <main class="main">
+    <div class="map-hint">
+      👆 地図をクリックしてスタート地点を選択
+    </div>
 
-    <!-- 左側 -->
-
-    <section class="panel">
-
-      <div class="panel-title">
-        散歩コースをつくる
-      </div>
-
-      <div class="panel-description">
-        地図をクリックするか、現在地を使ってスタート地点を決めてください。
-      </div>
+    <div id="map"></div>
 
 
-      <!-- START -->
+    <div
+      class="result-card"
+      id="resultCard"
+    >
 
-      <div class="form-group">
+      <div class="result-top">
 
-        <label class="form-label">
-          1. 出発地点
-        </label>
+        <div>
 
-        <div class="location-box">
-
-          <div
-            class="location-status"
-            id="locationStatus"
-          >
-            地図上の好きな場所をクリックしてください
+          <div class="result-label">
+            TODAY'S WALK
           </div>
 
-          <button
-            class="location-button"
-            id="locationButton"
-          >
-            📍 現在地を使う
-          </button>
+          <div class="result-title">
+            今日の散歩コース
+          </div>
 
+        </div>
+
+        <div class="result-badge">
+          周回ルート
         </div>
 
       </div>
 
 
-      <!-- TIME -->
+      <div class="stats">
 
-      <div class="form-group">
+        <div class="stat">
 
-        <label class="form-label">
-          2. 散歩したい時間
-        </label>
+          <div class="stat-name">
+            距離
+          </div>
 
-        <div class="time-grid">
+          <div class="stat-value">
+            <span id="distanceValue">-</span>
+            <small>km</small>
+          </div>
 
-          <button
-            class="time-button"
-            data-time="15"
-          >
-            15分
-          </button>
+        </div>
 
-          <button
-            class="time-button active"
-            data-time="30"
-          >
-            30分
-          </button>
 
-          <button
-            class="time-button"
-            data-time="45"
-          >
-            45分
-          </button>
+        <div class="stat">
 
-          <button
-            class="time-button"
-            data-time="60"
-          >
-            60分
-          </button>
+          <div class="stat-name">
+            所要時間
+          </div>
+
+          <div class="stat-value">
+            <span id="durationValue">-</span>
+            <small>分</small>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-name">
+            歩数の目安
+          </div>
+
+          <div class="stat-value">
+            <span id="stepsValue">-</span>
+            <small>歩</small>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-name">
+            消費カロリー
+          </div>
+
+          <div class="stat-value">
+            <span id="calorieValue">-</span>
+            <small>kcal</small>
+          </div>
 
         </div>
 
       </div>
 
-
-      <!-- SPEED -->
-
-      <div class="form-group">
-
-        <label
-          for="pace"
-          class="form-label"
-        >
-          3. 歩くペース
-        </label>
-
-        <select id="pace">
-
-          <option value="3.5">
-            のんびり
-          </option>
-
-          <option
-            value="4.5"
-            selected
-          >
-            普通
-          </option>
-
-          <option value="5.5">
-            早歩き
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- OPTIONS -->
-
-      <div class="form-group">
-
-        <label class="form-label">
-          4. 今日の気分
-        </label>
-
-        <div class="options">
-
-          <label class="option">
-            <input
-              type="checkbox"
-              id="parkOption"
-              checked
-            >
-            🌳 緑のある場所を歩きたい
-          </label>
-
-          <label class="option">
-            <input
-              type="checkbox"
-              id="quietOption"
-            >
-            ☕ のんびり寄り道したい
-          </label>
-
-          <label class="option">
-            <input
-              type="checkbox"
-              id="randomOption"
-              checked
-            >
-            🎲 毎回少し違うコース
-          </label>
-
-        </div>
-
-      </div>
-
-
-      <!-- BUTTON -->
-
-      <button
-        id="generateButton"
-        class="generate-button"
-      >
-        散歩コースをつくる
-      </button>
-
-      <button
-        id="anotherButton"
-        class="random-button"
-      >
-        ↻ 別のコースを考える
-      </button>
 
       <div
-        class="loading"
-        id="loading"
+        class="result-message"
+        id="resultMessage"
       >
-        散歩コースを考えています...
       </div>
 
-    </section>
 
-
-
-    <!-- 右側 -->
-
-    <section class="map-area">
-
-      <div class="map-hint">
-        👆 地図をクリックしてスタート地点を選択
-      </div>
-
-      <div id="map"></div>
-
-
-      <!-- RESULT -->
-
-      <div
-        class="result-card"
-        id="resultCard"
+      <button
+        class="record-button"
+        id="recordButton"
       >
+        この散歩を記録する
+      </button>
 
-        <div class="result-top">
+    </div>
 
-          <div>
+  </section>
 
-            <div class="result-label">
-              TODAY'S WALK
-            </div>
-
-            <div class="result-title">
-              今日の散歩コース
-            </div>
-
-          </div>
-
-          <div class="result-badge">
-            周回ルート
-          </div>
-
-        </div>
+</main>
 
 
-        <div class="stats">
+<!-- 履歴 -->
 
-          <div class="stat">
+<section class="history-section">
 
-            <div class="stat-name">
-              距離
-            </div>
+  <div class="history-card">
 
-            <div class="stat-value">
-              <span id="distanceValue">-</span>
-              <small>km</small>
-            </div>
+    <div class="history-header">
 
-          </div>
+      <h2>
+        最近の散歩
+      </h2>
 
+      <button
+        class="clear-button"
+        id="clearHistoryButton"
+      >
+        記録をすべて削除
+      </button>
 
-          <div class="stat">
+    </div>
 
-            <div class="stat-name">
-              所要時間
-            </div>
+    <div
+      class="history-list"
+      id="historyList"
+    ></div>
 
-            <div class="stat-value">
-              <span id="durationValue">-</span>
-              <small>分</small>
-            </div>
-
-          </div>
-
-
-          <div class="stat">
-
-            <div class="stat-name">
-              歩数の目安
-            </div>
-
-            <div class="stat-value">
-              <span id="stepsValue">-</span>
-              <small>歩</small>
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="result-message"
-          id="resultMessage"
-        >
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <div class="notice">
-    地図データ © OpenStreetMap contributors。
-    歩行ルートは公開ルーティングサービスを利用した試作版です。
-    実際に歩く際は道路状況・通行止め・私有地・工事・安全状況などを現地で確認してください。
   </div>
 
-
-  <!-- Leaflet -->
-
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
+</section>
 
 
-  <script>
-
-    /* =========================================
-       基本設定
-    ========================================= */
-
-    // 最初は東京駅付近を表示
-    const defaultLat = 35.681236;
-    const defaultLng = 139.767125;
-
-    let startPoint = null;
-
-    let startMarker = null;
-
-    let routeLayer = null;
-
-    let waypointLayers = [];
-
-    let selectedTime = 30;
+<div class="notice">
+  消費カロリー・歩数は目安です。実際の消費量は体格・路面・坂道・体調・歩き方などで変わります。
+  地図データ © OpenStreetMap contributors。
+  歩行ルートは公開ルーティングサービスを利用した試作版です。
+  実際に歩く際は道路状況・通行止め・私有地・工事・安全状況などを現地で確認してください。
+</div>
 
 
-    /* =========================================
-       MAP
-    ========================================= */
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""
+></script>
 
-    const map = L.map("map").setView(
-      [defaultLat, defaultLng],
-      14
+
+<script>
+
+  /* =========================================
+     STORAGE
+  ========================================= */
+
+  const PROFILE_KEY =
+    "sanpo_profile_v1";
+
+  const HISTORY_KEY =
+    "sanpo_history_v1";
+
+
+  function getProfile() {
+
+    const raw =
+      localStorage.getItem(
+        PROFILE_KEY
+      );
+
+    if (!raw) {
+
+      return {
+        age: null,
+        height: null,
+        weight: null
+      };
+
+    }
+
+    try {
+
+      return JSON.parse(raw);
+
+    } catch {
+
+      return {
+        age: null,
+        height: null,
+        weight: null
+      };
+
+    }
+
+  }
+
+
+  function saveProfile() {
+
+    const age =
+      Number(
+        document.getElementById(
+          "ageInput"
+        ).value
+      );
+
+    const height =
+      Number(
+        document.getElementById(
+          "heightInput"
+        ).value
+      );
+
+    const weight =
+      Number(
+        document.getElementById(
+          "weightInput"
+        ).value
+      );
+
+
+    if (
+      !age ||
+      !height ||
+      !weight
+    ) {
+
+      alert(
+        "年齢・身長・体重をすべて入力してください。"
+      );
+
+      return;
+
+    }
+
+
+    const profile = {
+      age,
+      height,
+      weight
+    };
+
+
+    localStorage.setItem(
+      PROFILE_KEY,
+      JSON.stringify(profile)
     );
 
 
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }
-    ).addTo(map);
+    document.getElementById(
+      "profileStatus"
+    ).textContent =
+      "✓ プロフィールを保存しました";
+
+
+    setTimeout(
+      function() {
+
+        document.getElementById(
+          "profileStatus"
+        ).textContent = "";
+
+      },
+      2500
+    );
+
+  }
+
+
+  function loadProfile() {
+
+    const profile =
+      getProfile();
+
+
+    if (profile.age) {
+
+      document.getElementById(
+        "ageInput"
+      ).value =
+        profile.age;
+
+    }
+
+
+    if (profile.height) {
+
+      document.getElementById(
+        "heightInput"
+      ).value =
+        profile.height;
+
+    }
+
+
+    if (profile.weight) {
+
+      document.getElementById(
+        "weightInput"
+      ).value =
+        profile.weight;
+
+    }
+
+  }
+
+
+  document.getElementById(
+    "profileSaveButton"
+  ).addEventListener(
+    "click",
+    saveProfile
+  );
 
 
 
-    /* =========================================
-       地図クリック
-    ========================================= */
+  /* =========================================
+     MAP
+  ========================================= */
 
-    map.on("click", function(event) {
+  const defaultLat =
+    35.681236;
+
+  const defaultLng =
+    139.767125;
+
+
+  let startPoint = null;
+
+  let startMarker = null;
+
+  let routeLayer = null;
+
+  let waypointLayers = [];
+
+  let selectedTime = 30;
+
+  let currentWalk = null;
+
+
+  const map =
+    L.map("map")
+      .setView(
+        [
+          defaultLat,
+          defaultLng
+        ],
+        14
+      );
+
+
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }
+  ).addTo(map);
+
+
+
+  map.on(
+    "click",
+    function(event) {
 
       setStartPoint(
         event.latlng.lat,
         event.latlng.lng
       );
 
-    });
+    }
+  );
 
 
 
-    /* =========================================
-       スタート地点セット
-    ========================================= */
+  function setStartPoint(
+    lat,
+    lng
+  ) {
 
-    function setStartPoint(lat, lng) {
-
-      startPoint = {
-        lat: lat,
-        lng: lng
-      };
-
-
-      if (startMarker) {
-
-        map.removeLayer(startMarker);
-
-      }
+    startPoint = {
+      lat,
+      lng
+    };
 
 
-      startMarker = L.marker(
-        [lat, lng]
-      )
-      .addTo(map)
-      .bindPopup("散歩スタート")
-      .openPopup();
+    if (startMarker) {
 
-
-      map.setView(
-        [lat, lng],
-        15
-      );
-
-
-      const status =
-        document.getElementById(
-          "locationStatus"
-        );
-
-
-      status.textContent =
-        "スタート地点を設定しました";
-
-      status.classList.add(
-        "active"
+      map.removeLayer(
+        startMarker
       );
 
     }
 
 
-
-    /* =========================================
-       現在地
-    ========================================= */
-
-    document
-      .getElementById("locationButton")
-      .addEventListener(
-        "click",
-        function() {
-
-          if (!navigator.geolocation) {
-
-            alert(
-              "このブラウザでは現在地を取得できません。"
-            );
-
-            return;
-
-          }
+    startMarker =
+      L.marker(
+        [
+          lat,
+          lng
+        ]
+      )
+      .addTo(map)
+      .bindPopup(
+        "散歩スタート"
+      )
+      .openPopup();
 
 
-          const button = this;
-
-          button.textContent =
-            "現在地を取得しています...";
-
-          button.disabled = true;
-
-
-          navigator.geolocation.getCurrentPosition(
-
-            function(position) {
-
-              const lat =
-                position.coords.latitude;
-
-              const lng =
-                position.coords.longitude;
+    map.setView(
+      [
+        lat,
+        lng
+      ],
+      15
+    );
 
 
-              setStartPoint(
-                lat,
-                lng
-              );
-
-
-              button.textContent =
-                "✓ 現在地を設定しました";
-
-              button.disabled = false;
-
-            },
-
-            function(error) {
-
-              console.error(error);
-
-              alert(
-                "現在地を取得できませんでした。地図をクリックしてスタート地点を選んでください。"
-              );
-
-
-              button.textContent =
-                "📍 現在地を使う";
-
-              button.disabled = false;
-
-            },
-
-            {
-              enableHighAccuracy: true,
-              timeout: 10000,
-              maximumAge: 60000
-            }
-
-          );
-
-        }
+    const status =
+      document.getElementById(
+        "locationStatus"
       );
 
 
+    status.textContent =
+      "スタート地点を設定しました";
 
-    /* =========================================
-       時間ボタン
-    ========================================= */
+    status.classList.add(
+      "active"
+    );
 
-    document
-      .querySelectorAll(
-        ".time-button"
-      )
-      .forEach(function(button) {
+  }
 
-        button.addEventListener(
-          "click",
-          function() {
 
-            document
-              .querySelectorAll(
-                ".time-button"
-              )
-              .forEach(function(btn) {
+
+  /* =========================================
+     現在地
+  ========================================= */
+
+  document.getElementById(
+    "locationButton"
+  ).addEventListener(
+    "click",
+    function() {
+
+      if (
+        !navigator.geolocation
+      ) {
+
+        alert(
+          "このブラウザでは現在地を取得できません。"
+        );
+
+        return;
+
+      }
+
+
+      const button =
+        this;
+
+
+      button.textContent =
+        "現在地を取得しています...";
+
+      button.disabled =
+        true;
+
+
+      navigator.geolocation
+        .getCurrentPosition(
+
+          function(position) {
+
+            const lat =
+              position.coords.latitude;
+
+            const lng =
+              position.coords.longitude;
+
+
+            setStartPoint(
+              lat,
+              lng
+            );
+
+
+            button.textContent =
+              "✓ 現在地を設定しました";
+
+            button.disabled =
+              false;
+
+          },
+
+          function(error) {
+
+            console.error(
+              error
+            );
+
+
+            alert(
+              "現在地を取得できませんでした。地図をクリックしてスタート地点を選んでください。"
+            );
+
+
+            button.textContent =
+              "📍 現在地を使う";
+
+            button.disabled =
+              false;
+
+          },
+
+          {
+            enableHighAccuracy:
+              true,
+
+            timeout:
+              10000,
+
+            maximumAge:
+              60000
+          }
+
+        );
+
+    }
+  );
+
+
+
+  /* =========================================
+     時間
+  ========================================= */
+
+  document.querySelectorAll(
+    ".time-button"
+  ).forEach(
+    function(button) {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          document
+            .querySelectorAll(
+              ".time-button"
+            )
+            .forEach(
+              function(btn) {
 
                 btn.classList.remove(
                   "active"
                 );
 
-              });
-
-
-            button.classList.add(
-              "active"
+              }
             );
 
 
-            selectedTime =
-              Number(
-                button.dataset.time
-              );
-
-          }
-        );
-
-      });
+          button.classList.add(
+            "active"
+          );
 
 
+          selectedTime =
+            Number(
+              button.dataset.time
+            );
 
-    /* =========================================
-       緯度経度から
-       一定距離離れた地点を計算
-    ========================================= */
-
-    function destinationPoint(
-      lat,
-      lng,
-      distanceKm,
-      bearingDegrees
-    ) {
-
-      const earthRadius = 6371;
-
-      const bearing =
-        bearingDegrees *
-        Math.PI /
-        180;
-
-
-      const lat1 =
-        lat *
-        Math.PI /
-        180;
-
-
-      const lng1 =
-        lng *
-        Math.PI /
-        180;
-
-
-      const angularDistance =
-        distanceKm /
-        earthRadius;
-
-
-      const lat2 =
-        Math.asin(
-
-          Math.sin(lat1) *
-          Math.cos(
-            angularDistance
-          )
-
-          +
-
-          Math.cos(lat1) *
-          Math.sin(
-            angularDistance
-          ) *
-          Math.cos(
-            bearing
-          )
-
-        );
-
-
-      const lng2 =
-        lng1 +
-
-        Math.atan2(
-
-          Math.sin(
-            bearing
-          ) *
-          Math.sin(
-            angularDistance
-          ) *
-          Math.cos(lat1),
-
-          Math.cos(
-            angularDistance
-          )
-
-          -
-
-          Math.sin(lat1) *
-          Math.sin(lat2)
-
-        );
-
-
-      return {
-
-        lat:
-          lat2 *
-          180 /
-          Math.PI,
-
-        lng:
-          lng2 *
-          180 /
-          Math.PI
-
-      };
+        }
+      );
 
     }
+  );
 
 
 
-    /* =========================================
-       周回用ウェイポイント作成
-    ========================================= */
+  /* =========================================
+     緯度経度計算
+  ========================================= */
 
-    function createWaypoints(
-      lat,
-      lng,
-      targetKm
-    ) {
+  function destinationPoint(
+    lat,
+    lng,
+    distanceKm,
+    bearingDegrees
+  ) {
 
-      /*
-        道路を歩くと直線距離より長くなるため
-        目標距離より小さめの半径にする
-      */
+    const earthRadius =
+      6371;
 
-      const radius =
-        Math.max(
-          0.18,
-          targetKm / 7
-        );
+    const bearing =
+      bearingDegrees *
+      Math.PI /
+      180;
+
+    const lat1 =
+      lat *
+      Math.PI /
+      180;
+
+    const lng1 =
+      lng *
+      Math.PI /
+      180;
+
+    const angularDistance =
+      distanceKm /
+      earthRadius;
 
 
-      let baseAngle;
+    const lat2 =
+      Math.asin(
+
+        Math.sin(lat1) *
+        Math.cos(
+          angularDistance
+        )
+
+        +
+
+        Math.cos(lat1) *
+        Math.sin(
+          angularDistance
+        ) *
+        Math.cos(
+          bearing
+        )
+
+      );
 
 
-      const randomEnabled =
-        document.getElementById(
-          "randomOption"
-        ).checked;
+    const lng2 =
+      lng1 +
+
+      Math.atan2(
+
+        Math.sin(
+          bearing
+        ) *
+        Math.sin(
+          angularDistance
+        ) *
+        Math.cos(lat1),
+
+        Math.cos(
+          angularDistance
+        )
+
+        -
+
+        Math.sin(lat1) *
+        Math.sin(lat2)
+
+      );
 
 
-      if (randomEnabled) {
+    return {
 
-        baseAngle =
-          Math.random() * 360;
+      lat:
+        lat2 *
+        180 /
+        Math.PI,
 
-      } else {
+      lng:
+        lng2 *
+        180 /
+        Math.PI
 
-        baseAngle = 20;
+    };
 
+  }
+
+
+
+  function createWaypoints(
+    lat,
+    lng,
+    targetKm
+  ) {
+
+    const radius =
+      Math.max(
+        0.18,
+        targetKm / 7
+      );
+
+
+    const randomEnabled =
+      document.getElementById(
+        "randomOption"
+      ).checked;
+
+
+    const baseAngle =
+      randomEnabled
+        ? Math.random() * 360
+        : 20;
+
+
+    const point1 =
+      destinationPoint(
+        lat,
+        lng,
+        radius,
+        baseAngle
+      );
+
+
+    const point2 =
+      destinationPoint(
+        lat,
+        lng,
+        radius * 1.15,
+        baseAngle + 105
+      );
+
+
+    const point3 =
+      destinationPoint(
+        lat,
+        lng,
+        radius,
+        baseAngle + 220
+      );
+
+
+    return [
+
+      {
+        lat,
+        lon: lng
+      },
+
+      {
+        lat:
+          point1.lat,
+
+        lon:
+          point1.lng
+      },
+
+      {
+        lat:
+          point2.lat,
+
+        lon:
+          point2.lng
+      },
+
+      {
+        lat:
+          point3.lat,
+
+        lon:
+          point3.lng
+      },
+
+      {
+        lat,
+        lon: lng
       }
 
+    ];
 
-      const point1 =
-        destinationPoint(
-          lat,
-          lng,
-          radius,
-          baseAngle
-        );
-
-
-      const point2 =
-        destinationPoint(
-          lat,
-          lng,
-          radius * 1.15,
-          baseAngle + 105
-        );
-
-
-      const point3 =
-        destinationPoint(
-          lat,
-          lng,
-          radius,
-          baseAngle + 220
-        );
-
-
-      return [
-
-        {
-          lat: lat,
-          lon: lng
-        },
-
-        {
-          lat: point1.lat,
-          lon: point1.lng
-        },
-
-        {
-          lat: point2.lat,
-          lon: point2.lng
-        },
-
-        {
-          lat: point3.lat,
-          lon: point3.lng
-        },
-
-        {
-          lat: lat,
-          lon: lng
-        }
-
-      ];
-
-    }
+  }
 
 
 
-    /* =========================================
-       Polyline6 Decoder
-    ========================================= */
+  /* =========================================
+     Polyline decoder
+  ========================================= */
 
-    function decodePolyline6(
-      encoded
+  function decodePolyline6(
+    encoded
+  ) {
+
+    let index = 0;
+
+    let lat = 0;
+
+    let lng = 0;
+
+    const coordinates = [];
+
+
+    while (
+      index <
+      encoded.length
     ) {
 
-      let index = 0;
+      let result = 0;
 
-      let lat = 0;
+      let shift = 0;
 
-      let lng = 0;
-
-      const coordinates = [];
+      let byte;
 
 
-      while (
-        index < encoded.length
-      ) {
+      do {
 
-        let result = 0;
-
-        let shift = 0;
-
-        let byte;
+        byte =
+          encoded.charCodeAt(
+            index++
+          ) - 63;
 
 
-        do {
-
-          byte =
-            encoded.charCodeAt(
-              index++
-            ) - 63;
-
-
-          result |=
-            (byte & 0x1f)
-            << shift;
+        result |=
+          (
+            byte &
+            0x1f
+          ) << shift;
 
 
-          shift += 5;
+        shift += 5;
 
-        } while (
-          byte >= 0x20
-        );
-
-
-        const deltaLat =
-          (result & 1)
-            ? ~(result >> 1)
-            : result >> 1;
+      } while (
+        byte >=
+        0x20
+      );
 
 
-        lat += deltaLat;
+      const deltaLat =
+        (
+          result & 1
+        )
+          ? ~(
+              result >> 1
+            )
+          : result >> 1;
 
 
-        result = 0;
-
-        shift = 0;
-
-
-        do {
-
-          byte =
-            encoded.charCodeAt(
-              index++
-            ) - 63;
+      lat +=
+        deltaLat;
 
 
-          result |=
-            (byte & 0x1f)
-            << shift;
+      result = 0;
+
+      shift = 0;
 
 
-          shift += 5;
+      do {
 
-        } while (
-          byte >= 0x20
-        );
-
-
-        const deltaLng =
-          (result & 1)
-            ? ~(result >> 1)
-            : result >> 1;
+        byte =
+          encoded.charCodeAt(
+            index++
+          ) - 63;
 
 
-        lng += deltaLng;
+        result |=
+          (
+            byte &
+            0x1f
+          ) << shift;
 
 
-        coordinates.push([
+        shift += 5;
+
+      } while (
+        byte >=
+        0x20
+      );
+
+
+      const deltaLng =
+        (
+          result & 1
+        )
+          ? ~(
+              result >> 1
+            )
+          : result >> 1;
+
+
+      lng +=
+        deltaLng;
+
+
+      coordinates.push(
+        [
           lat / 1e6,
           lng / 1e6
-        ]);
-
-      }
-
-
-      return coordinates;
+        ]
+      );
 
     }
 
 
+    return coordinates;
 
-    /* =========================================
-       古いルート削除
-    ========================================= */
-
-    function clearRoute() {
-
-      if (routeLayer) {
-
-        map.removeLayer(
-          routeLayer
-        );
-
-        routeLayer = null;
-
-      }
+  }
 
 
-      waypointLayers.forEach(
+
+  function clearRoute() {
+
+    if (
+      routeLayer
+    ) {
+
+      map.removeLayer(
+        routeLayer
+      );
+
+      routeLayer =
+        null;
+
+    }
+
+
+    waypointLayers
+      .forEach(
         function(layer) {
 
           map.removeLayer(
@@ -1430,22 +1937,1002 @@
       );
 
 
-      waypointLayers = [];
+    waypointLayers = [];
+
+  }
+
+
+
+  /* =========================================
+     歩数計算
+  ========================================= */
+
+  function calculateSteps(
+    distanceKm
+  ) {
+
+    const profile =
+      getProfile();
+
+
+    let strideMeters =
+      0.72;
+
+
+    if (
+      profile.height
+    ) {
+
+      strideMeters =
+        profile.height *
+        0.415 /
+        100;
 
     }
 
 
+    const steps =
+      distanceKm *
+      1000 /
+      strideMeters;
 
-    /* =========================================
-       ルート生成
-    ========================================= */
 
-    async function generateRoute() {
+    return Math.round(
+      steps
+    );
 
-      if (!startPoint) {
+  }
+
+
+
+  /* =========================================
+     消費カロリー
+  ========================================= */
+
+  function calculateCalories(
+    durationMinutes,
+    speed
+  ) {
+
+    const profile =
+      getProfile();
+
+
+    const weight =
+      profile.weight ||
+      60;
+
+
+    let met;
+
+
+    if (
+      speed <= 3.8
+    ) {
+
+      met = 3.0;
+
+    } else if (
+      speed <= 4.8
+    ) {
+
+      met = 3.5;
+
+    } else {
+
+      met = 4.3;
+
+    }
+
+
+    const hours =
+      durationMinutes /
+      60;
+
+
+    const calories =
+      met *
+      weight *
+      hours;
+
+
+    return Math.round(
+      calories
+    );
+
+  }
+
+
+
+  /* =========================================
+     ルート生成
+  ========================================= */
+
+  async function generateRoute() {
+
+    if (
+      !startPoint
+    ) {
+
+      alert(
+        "まず地図をクリックするか、現在地を設定してください！"
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById(
+        "generateButton"
+      );
+
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+
+    button.disabled =
+      true;
+
+    loading.classList.add(
+      "show"
+    );
+
+
+    clearRoute();
+
+
+    try {
+
+      const speed =
+        Number(
+          document.getElementById(
+            "pace"
+          ).value
+        );
+
+
+      const targetDistance =
+        speed *
+        (
+          selectedTime /
+          60
+        );
+
+
+      const locations =
+        createWaypoints(
+
+          startPoint.lat,
+
+          startPoint.lng,
+
+          targetDistance
+
+        );
+
+
+      const requestData = {
+
+        locations,
+
+        costing:
+          "pedestrian",
+
+        units:
+          "kilometers",
+
+        language:
+          "ja-JP",
+
+        directions_type:
+          "none"
+
+      };
+
+
+      const response =
+        await fetch(
+          "https://valhalla1.openstreetmap.de/route",
+          {
+            method:
+              "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(
+                requestData
+              )
+          }
+        );
+
+
+      if (
+        !response.ok
+      ) {
+
+        throw new Error(
+          "ルートAPIエラー"
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data.trip ||
+        !data.trip.legs
+      ) {
+
+        throw new Error(
+          "ルートが見つかりませんでした"
+        );
+
+      }
+
+
+      let routeCoordinates = [];
+
+
+      data.trip.legs
+        .forEach(
+          function(leg) {
+
+            if (
+              leg.shape
+            ) {
+
+              routeCoordinates =
+                routeCoordinates.concat(
+                  decodePolyline6(
+                    leg.shape
+                  )
+                );
+
+            }
+
+          }
+        );
+
+
+      if (
+        routeCoordinates.length === 0
+      ) {
+
+        throw new Error(
+          "ルート形状を取得できませんでした"
+        );
+
+      }
+
+
+      routeLayer =
+        L.polyline(
+          routeCoordinates,
+          {
+            color:
+              "#1f6b4f",
+
+            weight:
+              6,
+
+            opacity:
+              0.9,
+
+            lineJoin:
+              "round",
+
+            lineCap:
+              "round"
+          }
+        )
+        .addTo(map);
+
+
+      locations
+        .slice(
+          1,
+          -1
+        )
+        .forEach(
+          function(point) {
+
+            const circle =
+              L.circleMarker(
+                [
+                  point.lat,
+                  point.lon
+                ],
+                {
+                  radius:
+                    5,
+
+                  color:
+                    "#ffffff",
+
+                  weight:
+                    2,
+
+                  fillColor:
+                    "#1f6b4f",
+
+                  fillOpacity:
+                    1
+                }
+              )
+              .addTo(map);
+
+
+            waypointLayers.push(
+              circle
+            );
+
+          }
+        );
+
+
+      map.fitBounds(
+        routeLayer.getBounds(),
+        {
+          padding:
+            [
+              40,
+              40
+            ]
+        }
+      );
+
+
+      const distance =
+        Number(
+          data.trip.summary.length
+        );
+
+
+      const durationMinutes =
+        Math.round(
+          data.trip.summary.time /
+          60
+        );
+
+
+      const steps =
+        calculateSteps(
+          distance
+        );
+
+
+      const calories =
+        calculateCalories(
+          durationMinutes,
+          speed
+        );
+
+
+      currentWalk = {
+
+        distance,
+
+        duration:
+          durationMinutes,
+
+        steps,
+
+        calories,
+
+        speed
+
+      };
+
+
+      showResult(
+        currentWalk
+      );
+
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        error
+      );
+
+
+      alert(
+        "うまく散歩コースを作れませんでした。\n別の場所を選ぶか、もう一度試してみてください。"
+      );
+
+
+    } finally {
+
+      button.disabled =
+        false;
+
+
+      loading.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+
+
+
+  /* =========================================
+     結果
+  ========================================= */
+
+  function showResult(
+    walk
+  ) {
+
+    document.getElementById(
+      "distanceValue"
+    ).textContent =
+      walk.distance.toFixed(
+        1
+      );
+
+
+    document.getElementById(
+      "durationValue"
+    ).textContent =
+      walk.duration;
+
+
+    document.getElementById(
+      "stepsValue"
+    ).textContent =
+      walk.steps.toLocaleString();
+
+
+    document.getElementById(
+      "calorieValue"
+    ).textContent =
+      walk.calories;
+
+
+    let message =
+      "スタート地点に戻ってくる周回コースです。";
+
+
+    const profile =
+      getProfile();
+
+
+    if (
+      !profile.weight
+    ) {
+
+      message +=
+        " 体重をプロフィールに保存すると、消費カロリーをより自分向けに計算できます。";
+
+    } else {
+
+      message +=
+        " この散歩を終えたら、下のボタンから記録に残せます。";
+
+    }
+
+
+    document.getElementById(
+      "resultMessage"
+    ).textContent =
+      message;
+
+
+    document.getElementById(
+      "resultCard"
+    ).classList.add(
+      "show"
+    );
+
+
+    const recordButton =
+      document.getElementById(
+        "recordButton"
+      );
+
+
+    recordButton.disabled =
+      false;
+
+
+    recordButton.textContent =
+      "この散歩を記録する";
+
+  }
+
+
+
+  /* =========================================
+     履歴
+  ========================================= */
+
+  function getHistory() {
+
+    const raw =
+      localStorage.getItem(
+        HISTORY_KEY
+      );
+
+
+    if (
+      !raw
+    ) {
+
+      return [];
+
+    }
+
+
+    try {
+
+      return JSON.parse(
+        raw
+      );
+
+    } catch {
+
+      return [];
+
+    }
+
+  }
+
+
+
+  function saveHistory(
+    history
+  ) {
+
+    localStorage.setItem(
+      HISTORY_KEY,
+      JSON.stringify(
+        history
+      )
+    );
+
+  }
+
+
+
+  function recordCurrentWalk() {
+
+    if (
+      !currentWalk
+    ) {
+
+      return;
+
+    }
+
+
+    const history =
+      getHistory();
+
+
+    history.unshift(
+      {
+        id:
+          Date.now(),
+
+        date:
+          new Date()
+            .toISOString(),
+
+        distance:
+          currentWalk.distance,
+
+        duration:
+          currentWalk.duration,
+
+        steps:
+          currentWalk.steps,
+
+        calories:
+          currentWalk.calories
+      }
+    );
+
+
+    saveHistory(
+      history
+    );
+
+
+    renderHistory();
+
+    updateDashboard();
+
+
+    const button =
+      document.getElementById(
+        "recordButton"
+      );
+
+
+    button.textContent =
+      "✓ 記録しました";
+
+    button.disabled =
+      true;
+
+  }
+
+
+
+  function renderHistory() {
+
+    const history =
+      getHistory();
+
+
+    const container =
+      document.getElementById(
+        "historyList"
+      );
+
+
+    container.innerHTML =
+      "";
+
+
+    if (
+      history.length === 0
+    ) {
+
+      container.innerHTML =
+        '<div class="history-empty">まだ散歩記録がありません。最初の散歩を記録してみよう。</div>';
+
+      return;
+
+    }
+
+
+    history
+      .slice(
+        0,
+        10
+      )
+      .forEach(
+        function(item) {
+
+          const date =
+            new Date(
+              item.date
+            );
+
+
+          const dateText =
+            date.toLocaleDateString(
+              "ja-JP",
+              {
+                month:
+                  "numeric",
+
+                day:
+                  "numeric",
+
+                weekday:
+                  "short"
+              }
+            );
+
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+
+          div.className =
+            "history-item";
+
+
+          div.innerHTML = `
+
+            <div class="history-date">
+              ${dateText}
+            </div>
+
+            <div class="history-value">
+              <span>距離</span>
+              ${Number(item.distance).toFixed(1)} km
+            </div>
+
+            <div class="history-value">
+              <span>時間</span>
+              ${item.duration} 分
+            </div>
+
+            <div class="history-value">
+              <span>歩数</span>
+              ${Number(item.steps).toLocaleString()} 歩
+            </div>
+
+            <div class="history-value">
+              <span>消費</span>
+              ${item.calories} kcal
+            </div>
+
+          `;
+
+
+          container.appendChild(
+            div
+          );
+
+        }
+      );
+
+  }
+
+
+
+  /* =========================================
+     今週・今月集計
+  ========================================= */
+
+  function isSameMonth(
+    dateA,
+    dateB
+  ) {
+
+    return (
+      dateA.getFullYear() ===
+      dateB.getFullYear()
+
+      &&
+
+      dateA.getMonth() ===
+      dateB.getMonth()
+    );
+
+  }
+
+
+
+  function getStartOfWeek(
+    date
+  ) {
+
+    const result =
+      new Date(
+        date
+      );
+
+
+    const day =
+      result.getDay();
+
+
+    const diff =
+      day === 0
+        ? -6
+        : 1 - day;
+
+
+    result.setDate(
+      result.getDate() +
+      diff
+    );
+
+
+    result.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    return result;
+
+  }
+
+
+
+  function updateDashboard() {
+
+    const history =
+      getHistory();
+
+
+    const now =
+      new Date();
+
+
+    const startOfWeek =
+      getStartOfWeek(
+        now
+      );
+
+
+    let weekDistance = 0;
+
+    let weekCalories = 0;
+
+    let monthDistance = 0;
+
+    let monthCalories = 0;
+
+
+    history.forEach(
+      function(item) {
+
+        const date =
+          new Date(
+            item.date
+          );
+
+
+        if (
+          date >=
+          startOfWeek
+        ) {
+
+          weekDistance +=
+            Number(
+              item.distance
+            );
+
+
+          weekCalories +=
+            Number(
+              item.calories
+            );
+
+        }
+
+
+        if (
+          isSameMonth(
+            date,
+            now
+          )
+        ) {
+
+          monthDistance +=
+            Number(
+              item.distance
+            );
+
+
+          monthCalories +=
+            Number(
+              item.calories
+            );
+
+        }
+
+      }
+    );
+
+
+    document.getElementById(
+      "weekDistance"
+    ).textContent =
+      weekDistance.toFixed(
+        1
+      );
+
+
+    document.getElementById(
+      "weekCalories"
+    ).textContent =
+      Math.round(
+        weekCalories
+      );
+
+
+    document.getElementById(
+      "monthDistance"
+    ).textContent =
+      monthDistance.toFixed(
+        1
+      );
+
+
+    document.getElementById(
+      "monthCalories"
+    ).textContent =
+      Math.round(
+        monthCalories
+      );
+
+  }
+
+
+
+  /* =========================================
+     削除
+  ========================================= */
+
+  function clearHistory() {
+
+    const history =
+      getHistory();
+
+
+    if (
+      history.length === 0
+    ) {
+
+      alert(
+        "削除する記録はありません。"
+      );
+
+      return;
+
+    }
+
+
+    const ok =
+      confirm(
+        "散歩記録をすべて削除しますか？"
+      );
+
+
+    if (
+      !ok
+    ) {
+
+      return;
+
+    }
+
+
+    localStorage.removeItem(
+      HISTORY_KEY
+    );
+
+
+    renderHistory();
+
+    updateDashboard();
+
+  }
+
+
+
+  /* =========================================
+     イベント
+  ========================================= */
+
+  document.getElementById(
+    "generateButton"
+  ).addEventListener(
+    "click",
+    generateRoute
+  );
+
+
+  document.getElementById(
+    "anotherButton"
+  ).addEventListener(
+    "click",
+    function() {
+
+      if (
+        !startPoint
+      ) {
 
         alert(
-          "まず地図をクリックするか、現在地を設定してください！"
+          "まずスタート地点を設定してください！"
         );
 
         return;
@@ -1453,447 +2940,40 @@
       }
 
 
-      const button =
-        document.getElementById(
-          "generateButton"
-        );
-
-
-      const loading =
-        document.getElementById(
-          "loading"
-        );
-
-
-      button.disabled = true;
-
-      loading.classList.add(
-        "show"
-      );
-
-
-      clearRoute();
-
-
-      try {
-
-        /*
-          選択した速度
-          km/h
-        */
-
-        const speed =
-          Number(
-            document.getElementById(
-              "pace"
-            ).value
-          );
-
-
-        /*
-          希望時間から
-          おおよその目標距離
-        */
-
-        const targetDistance =
-          speed *
-          (
-            selectedTime /
-            60
-          );
-
-
-        const locations =
-          createWaypoints(
-
-            startPoint.lat,
-
-            startPoint.lng,
-
-            targetDistance
-
-          );
-
-
-        /*
-          Valhalla
-          歩行者用ルーティング
-        */
-
-        const requestData = {
-
-          locations:
-            locations,
-
-          costing:
-            "pedestrian",
-
-          units:
-            "kilometers",
-
-          language:
-            "ja-JP",
-
-          directions_type:
-            "none"
-
-        };
-
-
-        const response =
-          await fetch(
-            "https://valhalla1.openstreetmap.de/route",
-            {
-              method:
-                "POST",
-
-              headers: {
-
-                "Content-Type":
-                  "application/json",
-
-                "X-Client-Id":
-                  "sanpo-route-prototype"
-
-              },
-
-              body:
-                JSON.stringify(
-                  requestData
-                )
-
-            }
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "ルートAPIエラー: " +
-            response.status
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        if (
-          !data.trip ||
-          !data.trip.legs
-        ) {
-
-          throw new Error(
-            "ルートが見つかりませんでした"
-          );
-
-        }
-
-
-        /*
-          複数のlegをまとめる
-        */
-
-        let routeCoordinates = [];
-
-
-        data.trip.legs.forEach(
-          function(leg) {
-
-            if (leg.shape) {
-
-              const decoded =
-                decodePolyline6(
-                  leg.shape
-                );
-
-
-              routeCoordinates =
-                routeCoordinates.concat(
-                  decoded
-                );
-
-            }
-
-          }
-        );
-
-
-        if (
-          routeCoordinates.length === 0
-        ) {
-
-          throw new Error(
-            "ルート形状を取得できませんでした"
-          );
-
-        }
-
-
-        /*
-          地図に描画
-        */
-
-        routeLayer =
-          L.polyline(
-            routeCoordinates,
-            {
-              color:
-                "#1f6b4f",
-
-              weight:
-                6,
-
-              opacity:
-                0.9,
-
-              lineJoin:
-                "round",
-
-              lineCap:
-                "round"
-            }
-          ).addTo(map);
-
-
-        /*
-          中継地点
-        */
-
-        locations
-          .slice(1, -1)
-          .forEach(
-            function(point) {
-
-              const circle =
-                L.circleMarker(
-                  [
-                    point.lat,
-                    point.lon
-                  ],
-                  {
-                    radius: 5,
-                    color: "#ffffff",
-                    weight: 2,
-                    fillColor: "#1f6b4f",
-                    fillOpacity: 1
-                  }
-                )
-                .addTo(map);
-
-
-              waypointLayers.push(
-                circle
-              );
-
-            }
-          );
-
-
-        map.fitBounds(
-          routeLayer.getBounds(),
-          {
-            padding:
-              [40, 40]
-          }
-        );
-
-
-        /*
-          APIから距離・時間
-        */
-
-        const distance =
-          data.trip.summary.length;
-
-
-        const durationMinutes =
-          Math.round(
-            data.trip.summary.time /
-            60
-          );
-
-
-        /*
-          歩幅約0.72mで
-          歩数をざっくり計算
-        */
-
-        const steps =
-          Math.round(
-            distance *
-            1000 /
-            0.72
-          );
-
-
-        showResult(
-          distance,
-          durationMinutes,
-          steps
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        alert(
-          "うまく散歩コースを作れませんでした。\n\n別の場所を選ぶか、もう一度試してみてください。"
-        );
-
-
-      } finally {
-
-        button.disabled = false;
-
-        loading.classList.remove(
-          "show"
-        );
-
-      }
+      generateRoute();
 
     }
+  );
+
+
+  document.getElementById(
+    "recordButton"
+  ).addEventListener(
+    "click",
+    recordCurrentWalk
+  );
+
+
+  document.getElementById(
+    "clearHistoryButton"
+  ).addEventListener(
+    "click",
+    clearHistory
+  );
 
 
 
-    /* =========================================
-       結果表示
-    ========================================= */
+  /* =========================================
+     初期表示
+  ========================================= */
 
-    function showResult(
-      distance,
-      duration,
-      steps
-    ) {
+  loadProfile();
 
-      document
-        .getElementById(
-          "distanceValue"
-        )
-        .textContent =
-          distance.toFixed(1);
+  renderHistory();
 
+  updateDashboard();
 
-      document
-        .getElementById(
-          "durationValue"
-        )
-        .textContent =
-          duration;
-
-
-      document
-        .getElementById(
-          "stepsValue"
-        )
-        .textContent =
-          steps.toLocaleString();
-
-
-      let message =
-        "スタート地点に戻ってくる周回コースです。";
-
-
-      const park =
-        document.getElementById(
-          "parkOption"
-        ).checked;
-
-
-      const quiet =
-        document.getElementById(
-          "quietOption"
-        ).checked;
-
-
-      if (park && quiet) {
-
-        message +=
-          " 緑を眺めたり、気になるお店に寄り道しながら歩くのもおすすめ。";
-
-      } else if (park) {
-
-        message +=
-          " 景色を楽しみながら、無理のないペースで歩いてみましょう。";
-
-      } else if (quiet) {
-
-        message +=
-          " 気になるお店を見つけたら、少し寄り道するのもあり。";
-
-      } else {
-
-        message +=
-          " いつもの街を、少し違うルートで歩いてみましょう。";
-
-      }
-
-
-      document
-        .getElementById(
-          "resultMessage"
-        )
-        .textContent =
-          message;
-
-
-      document
-        .getElementById(
-          "resultCard"
-        )
-        .classList.add(
-          "show"
-        );
-
-    }
-
-
-
-    /* =========================================
-       ボタン
-    ========================================= */
-
-    document
-      .getElementById(
-        "generateButton"
-      )
-      .addEventListener(
-        "click",
-        generateRoute
-      );
-
-
-    document
-      .getElementById(
-        "anotherButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          if (!startPoint) {
-
-            alert(
-              "まずスタート地点を設定してください！"
-            );
-
-            return;
-
-          }
-
-
-          generateRoute();
-
-        }
-      );
-
-  </script>
+</script>
 
 </body>
 </html>
