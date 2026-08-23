@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SANPO | 散歩コースメーカー!</title>
+  <title>SANPO | 散歩コースメーカー</title>
 
-  <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin=""
-  />
+  >
 
   <style>
     * {
@@ -25,11 +23,11 @@
       --green-dark: #164c3a;
       --green-light: #e8f4ee;
       --cream: #f8f7f2;
-      --text: #222222;
+      --text: #222;
       --subtext: #6a6a6a;
       --border: #e3e3df;
       --white: #ffffff;
-      --shadow: 0 14px 45px rgba(0, 0, 0, 0.08);
+      --shadow: 0 14px 45px rgba(0,0,0,.08);
     }
 
     html {
@@ -41,7 +39,6 @@
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
-        "Hiragino Kaku Gothic ProN",
         "Hiragino Sans",
         "Yu Gothic",
         Meiryo,
@@ -52,8 +49,8 @@
     }
 
     button,
-    select,
-    input {
+    input,
+    select {
       font: inherit;
     }
 
@@ -62,37 +59,47 @@
     }
 
     header {
-      min-height: 72px;
-      background: rgba(255, 255, 255, 0.95);
+      height: 72px;
+      background: rgba(255,255,255,.95);
       border-bottom: 1px solid var(--border);
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       padding: 0 6%;
+
       position: sticky;
       top: 0;
       z-index: 1000;
-      backdrop-filter: blur(10px);
+
+      backdrop-filter: blur(12px);
     }
 
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
+
       font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
+      font-weight: 900;
+      letter-spacing: .08em;
+
       color: var(--green);
     }
 
     .logo-mark {
       width: 38px;
       height: 38px;
+
       border-radius: 50%;
+
       background: var(--green);
       color: white;
+
       display: grid;
       place-items: center;
+
       font-size: 20px;
     }
 
@@ -102,27 +109,32 @@
     }
 
     .hero {
-      padding: 55px 6% 35px;
       max-width: 1400px;
       margin: 0 auto;
+
+      padding: 55px 6% 35px;
     }
 
     .hero-label {
       display: inline-block;
-      color: var(--green);
+
       background: var(--green-light);
+      color: var(--green);
+
       padding: 7px 13px;
+
       border-radius: 30px;
+
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
+
       margin-bottom: 18px;
     }
 
     .hero h1 {
-      font-size: clamp(34px, 5vw, 62px);
+      font-size: clamp(34px,5vw,62px);
       line-height: 1.15;
-      letter-spacing: -0.04em;
-      max-width: 850px;
+      letter-spacing: -.04em;
     }
 
     .hero h1 span {
@@ -130,22 +142,27 @@
     }
 
     .hero p {
-      color: var(--subtext);
-      line-height: 1.8;
       margin-top: 18px;
-      max-width: 720px;
+
+      max-width: 700px;
+
       font-size: 15px;
+      line-height: 1.8;
+
+      color: var(--subtext);
     }
 
     .section-wrap {
       max-width: 1400px;
       margin: 0 auto;
+
       padding: 0 6% 28px;
     }
 
     .section-title {
       font-size: 24px;
-      font-weight: 800;
+      font-weight: 900;
+
       margin-bottom: 7px;
     }
 
@@ -153,67 +170,92 @@
       color: var(--subtext);
       font-size: 13px;
       line-height: 1.7;
+
       margin-bottom: 18px;
     }
 
+    /* =========================
+       DASHBOARD
+    ========================= */
+
     .dashboard-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
       gap: 14px;
     }
 
     .dashboard-card {
       background: white;
+
       border-radius: 18px;
+
       padding: 20px;
+
       box-shadow: var(--shadow);
     }
 
     .dashboard-name {
       font-size: 12px;
       color: var(--subtext);
+
       margin-bottom: 8px;
     }
 
     .dashboard-value {
       font-size: 27px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .dashboard-value small {
       font-size: 12px;
-      margin-left: 4px;
       font-weight: 600;
+
+      margin-left: 4px;
     }
+
+    /* =========================
+       PROFILE
+    ========================= */
 
     .profile-card {
       background: white;
+
       border-radius: 22px;
+
       padding: 24px;
+
       box-shadow: var(--shadow);
     }
 
     .profile-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
+
       gap: 12px;
+
       align-items: end;
     }
 
     .input-group label {
       display: block;
+
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
+
       margin-bottom: 8px;
     }
 
     .input-group input {
       width: 100%;
-      border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 12px;
+
       padding: 13px;
+
+      border: 1px solid var(--border);
+      border-radius: 12px;
+
       outline: none;
+
+      background: white;
     }
 
     .input-group input:focus {
@@ -222,48 +264,68 @@
 
     .profile-save {
       width: 100%;
+
+      padding: 13px;
+
       border: none;
       border-radius: 12px;
-      padding: 13px;
+
       background: var(--green);
       color: white;
-      font-weight: 800;
+
+      font-weight: 900;
     }
 
     .profile-status {
-      margin-top: 12px;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700;
       min-height: 18px;
+
+      margin-top: 12px;
+
+      font-size: 12px;
+      font-weight: 800;
+
+      color: var(--green);
     }
+
+    /* =========================
+       MAIN
+    ========================= */
 
     .main {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 6% 28px;
+
+      padding: 0 6% 30px;
+
       display: grid;
       grid-template-columns: 390px 1fr;
+
       gap: 24px;
     }
 
     .panel {
-      background: var(--white);
+      background: white;
+
       border-radius: 24px;
+
       padding: 26px;
+
       box-shadow: var(--shadow);
     }
 
     .panel-title {
       font-size: 18px;
-      font-weight: 800;
+      font-weight: 900;
+
       margin-bottom: 6px;
     }
 
     .panel-description {
-      color: var(--subtext);
       font-size: 13px;
       line-height: 1.7;
+
+      color: var(--subtext);
+
       margin-bottom: 25px;
     }
 
@@ -273,82 +335,107 @@
 
     .form-label {
       display: block;
-      font-size: 13px;
-      font-weight: 700;
+
       margin-bottom: 9px;
+
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .location-box {
       background: #f7f8f6;
+
       border: 1px solid var(--border);
       border-radius: 14px;
+
       padding: 14px;
     }
 
     .location-status {
       font-size: 13px;
-      color: var(--subtext);
       line-height: 1.6;
+
+      color: var(--subtext);
+
       margin-bottom: 10px;
     }
 
     .location-status.active {
       color: var(--green);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .location-button {
       width: 100%;
+
       border: none;
+      border-radius: 10px;
+
+      padding: 12px;
+
       background: var(--green-light);
       color: var(--green);
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 10px;
+
+      font-weight: 800;
     }
 
     .time-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
+
       gap: 7px;
     }
 
     .time-button {
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 10px;
       padding: 12px 4px;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: white;
+
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .time-button.active {
       background: var(--green);
       color: white;
+
       border-color: var(--green);
     }
 
     select {
       width: 100%;
+
+      padding: 13px;
+
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 13px;
+
       background: white;
+
       outline: none;
     }
 
     .options {
       display: grid;
+
       gap: 10px;
     }
 
     .option {
       display: flex;
       align-items: center;
+
       gap: 10px;
+
       padding: 12px 13px;
-      background: #f8f8f6;
+
       border-radius: 11px;
+
+      background: #f8f8f6;
+
       font-size: 13px;
     }
 
@@ -358,82 +445,223 @@
 
     .generate-button {
       width: 100%;
+
+      padding: 16px;
+
       border: none;
       border-radius: 14px;
-      padding: 16px;
-      color: white;
+
       background: var(--green);
-      font-weight: 800;
+      color: white;
+
       font-size: 15px;
-      box-shadow: 0 8px 20px rgba(31, 107, 79, 0.2);
+      font-weight: 900;
+
+      box-shadow: 0 8px 20px rgba(31,107,79,.22);
+    }
+
+    .generate-button:hover {
+      background: var(--green-dark);
     }
 
     .generate-button:disabled {
       background: #aaa;
-      box-shadow: none;
+
       cursor: not-allowed;
+
+      box-shadow: none;
     }
 
     .random-button {
       width: 100%;
+
       margin-top: 9px;
+
+      padding: 13px;
+
       border: 1px solid var(--border);
       border-radius: 13px;
-      padding: 13px;
+
       background: white;
-      font-weight: 700;
+
       color: #444;
+
+      font-weight: 800;
     }
 
     .loading {
       display: none;
+
       margin-top: 13px;
-      color: var(--green);
-      font-size: 13px;
+
       text-align: center;
-      font-weight: 700;
+
+      font-size: 13px;
+      font-weight: 800;
+
+      color: var(--green);
     }
 
     .loading.show {
       display: block;
     }
 
+    /* =========================
+       MAP
+    ========================= */
+
     .map-area {
       position: relative;
+
       min-width: 0;
     }
 
     #map {
       width: 100%;
       height: 650px;
+
       border-radius: 24px;
+
       box-shadow: var(--shadow);
+
+      overflow: hidden;
+
       z-index: 1;
     }
 
     .map-hint {
       position: absolute;
+
       top: 16px;
       left: 50%;
+
       transform: translateX(-50%);
+
       z-index: 500;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 10px 15px;
+
+      padding: 10px 16px;
+
       border-radius: 30px;
+
+      background: rgba(255,255,255,.96);
+
+      box-shadow: 0 5px 20px rgba(0,0,0,.13);
+
       font-size: 12px;
-      font-weight: 700;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-      pointer-events: none;
+      font-weight: 900;
+
       white-space: nowrap;
+
+      pointer-events: none;
     }
 
-    .result-card {
-      margin-top: 24px;
-      background: white;
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 26px;
+    .map-summary {
       display: none;
+
+      position: absolute;
+
+      left: 18px;
+      bottom: 28px;
+
+      z-index: 500;
+
+      background: rgba(255,255,255,.96);
+
+      border-radius: 16px;
+
+      padding: 13px 16px;
+
+      box-shadow: 0 7px 25px rgba(0,0,0,.16);
+
+      backdrop-filter: blur(10px);
+    }
+
+    .map-summary.show {
+      display: block;
+    }
+
+    .map-summary-title {
+      font-size: 11px;
+      font-weight: 800;
+
+      color: var(--subtext);
+
+      margin-bottom: 5px;
+    }
+
+    .map-summary-main {
+      display: flex;
+      gap: 14px;
+
+      color: var(--green-dark);
+
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    /* SANPO MARKER */
+
+    .sanpo-marker {
+      position: relative;
+
+      width: 46px;
+      height: 46px;
+
+      border-radius: 50% 50% 50% 8px;
+
+      transform: rotate(-45deg);
+
+      background: var(--green);
+
+      border: 4px solid white;
+
+      box-shadow: 0 6px 16px rgba(0,0,0,.25);
+    }
+
+    .sanpo-marker-inner {
+      position: absolute;
+
+      top: 50%;
+      left: 50%;
+
+      transform:
+        translate(-50%,-50%)
+        rotate(45deg);
+
+      font-size: 17px;
+    }
+
+    .leaflet-div-icon {
+      background: transparent;
+      border: none;
+    }
+
+    .leaflet-control-zoom {
+      border: none !important;
+
+      box-shadow: 0 4px 18px rgba(0,0,0,.12) !important;
+    }
+
+    .leaflet-control-zoom a {
+      border: none !important;
+    }
+
+    /* =========================
+       RESULT
+    ========================= */
+
+    .result-card {
+      display: none;
+
+      margin-top: 24px;
+
+      padding: 26px;
+
+      border-radius: 24px;
+
+      background: white;
+
+      box-shadow: var(--shadow);
     }
 
     .result-card.show {
@@ -442,105 +670,138 @@
 
     .result-top {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
+      align-items: flex-start;
+
       gap: 20px;
+
       margin-bottom: 22px;
     }
 
     .result-label {
       color: var(--green);
+
       font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
+      font-weight: 900;
+
+      letter-spacing: .08em;
+
       margin-bottom: 7px;
     }
 
     .result-title {
       font-size: 24px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .result-badge {
       background: var(--green-light);
       color: var(--green);
+
       padding: 8px 12px;
+
       border-radius: 20px;
+
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
+
       white-space: nowrap;
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
+
       gap: 12px;
     }
 
     .stat {
       padding: 16px;
+
       border-radius: 15px;
+
       background: #f8f8f6;
     }
 
     .stat-name {
       font-size: 11px;
+
       color: var(--subtext);
+
       margin-bottom: 7px;
     }
 
     .stat-value {
       font-size: 21px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .stat-value small {
       font-size: 12px;
       font-weight: 600;
+
       margin-left: 3px;
     }
 
     .result-message {
       margin-top: 18px;
+
       font-size: 13px;
-      color: var(--subtext);
       line-height: 1.8;
+
+      color: var(--subtext);
     }
 
     .record-button {
       width: 100%;
+
       margin-top: 18px;
+
+      padding: 14px;
+
       border: none;
+      border-radius: 13px;
+
       background: #222;
       color: white;
-      border-radius: 13px;
-      padding: 14px;
-      font-weight: 800;
+
+      font-weight: 900;
     }
 
     .record-button:disabled {
       background: #aaa;
+
       cursor: not-allowed;
     }
+
+    /* =========================
+       HISTORY
+    ========================= */
 
     .history-section {
       max-width: 1400px;
       margin: 0 auto;
+
       padding: 0 6% 70px;
     }
 
     .history-card {
       background: white;
+
       border-radius: 24px;
+
       padding: 26px;
+
       box-shadow: var(--shadow);
     }
 
     .history-header {
       display: flex;
       justify-content: space-between;
-      gap: 15px;
       align-items: center;
+
+      gap: 15px;
+
       margin-bottom: 20px;
     }
 
@@ -549,41 +810,54 @@
     }
 
     .clear-button {
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 10px;
       padding: 9px 12px;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: white;
+
       color: #777;
+
       font-size: 12px;
     }
 
     .history-list {
       display: grid;
+
       gap: 10px;
     }
 
     .history-empty {
       padding: 30px;
+
       text-align: center;
+
       color: var(--subtext);
+
       background: #f8f8f6;
+
       border-radius: 14px;
+
       font-size: 13px;
     }
 
     .history-item {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4,1fr);
+      align-items: center;
+
+      gap: 10px;
+
       border: 1px solid var(--border);
       border-radius: 14px;
+
       padding: 15px;
-      display: grid;
-      grid-template-columns: 1.5fr repeat(4, 1fr);
-      gap: 10px;
-      align-items: center;
     }
 
     .history-date {
-      font-weight: 800;
       font-size: 13px;
+      font-weight: 900;
     }
 
     .history-value {
@@ -592,27 +866,34 @@
 
     .history-value span {
       display: block;
+
       color: var(--subtext);
+
       font-size: 10px;
+
       margin-bottom: 3px;
     }
 
     .notice {
       max-width: 1400px;
       margin: 0 auto 60px;
+
       padding: 0 6%;
+
       color: #777;
+
       font-size: 11px;
       line-height: 1.8;
     }
 
-    @media (max-width: 1000px) {
+    @media(max-width:1000px) {
+
       .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
       }
 
       .profile-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
       }
 
       .main {
@@ -620,11 +901,13 @@
       }
 
       .stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
       }
+
     }
 
-    @media (max-width: 700px) {
+    @media(max-width:700px) {
+
       header {
         padding: 0 20px;
       }
@@ -650,14 +933,6 @@
         font-size: 38px;
       }
 
-      .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .profile-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
       #map {
         height: 470px;
       }
@@ -669,9 +944,16 @@
       .history-date {
         grid-column: 1 / -1;
       }
+
+      .map-summary {
+        left: 12px;
+        bottom: 22px;
+      }
+
     }
 
-    @media (max-width: 480px) {
+    @media(max-width:480px) {
+
       .dashboard-grid,
       .profile-grid,
       .stats {
@@ -689,24 +971,36 @@
       #map {
         height: 420px;
       }
+
     }
+
   </style>
 </head>
+
 
 <body>
 
 <header>
+
   <div class="logo">
-    <div class="logo-mark">歩</div>
+
+    <div class="logo-mark">
+      歩
+    </div>
+
     SANPO
+
   </div>
 
   <div class="header-right">
     歩いて、記録して、続けよう。
   </div>
+
 </header>
 
+
 <section class="hero">
+
   <div class="hero-label">
     WALK & DIET
   </div>
@@ -720,10 +1014,10 @@
     散歩コースを自動でつくって、距離・時間・歩数・消費カロリーを記録。
     毎日の散歩を、続けやすい習慣に。
   </p>
+
 </section>
 
 
-<!-- 集計 -->
 
 <section class="section-wrap">
 
@@ -735,38 +1029,62 @@
     この端末のブラウザに保存された散歩記録を集計しています。
   </div>
 
+
   <div class="dashboard-grid">
 
     <div class="dashboard-card">
-      <div class="dashboard-name">今週の距離</div>
+
+      <div class="dashboard-name">
+        今週の距離
+      </div>
+
       <div class="dashboard-value">
         <span id="weekDistance">0.0</span>
         <small>km</small>
       </div>
+
     </div>
 
+
     <div class="dashboard-card">
-      <div class="dashboard-name">今週の消費</div>
+
+      <div class="dashboard-name">
+        今週の消費
+      </div>
+
       <div class="dashboard-value">
         <span id="weekCalories">0</span>
         <small>kcal</small>
       </div>
+
     </div>
 
+
     <div class="dashboard-card">
-      <div class="dashboard-name">今月の距離</div>
+
+      <div class="dashboard-name">
+        今月の距離
+      </div>
+
       <div class="dashboard-value">
         <span id="monthDistance">0.0</span>
         <small>km</small>
       </div>
+
     </div>
 
+
     <div class="dashboard-card">
-      <div class="dashboard-name">今月の消費</div>
+
+      <div class="dashboard-name">
+        今月の消費
+      </div>
+
       <div class="dashboard-value">
         <span id="monthCalories">0</span>
         <small>kcal</small>
       </div>
+
     </div>
 
   </div>
@@ -774,7 +1092,6 @@
 </section>
 
 
-<!-- プロフィール -->
 
 <section class="section-wrap">
 
@@ -786,43 +1103,56 @@
     身長は歩数の目安、体重は消費カロリーの目安計算に使います。
   </div>
 
+
   <div class="profile-card">
 
     <div class="profile-grid">
 
       <div class="input-group">
-        <label for="ageInput">年齢</label>
+
+        <label for="ageInput">
+          年齢
+        </label>
+
         <input
           id="ageInput"
           type="number"
-          min="1"
-          max="120"
           placeholder="例：30"
-        />
+        >
+
       </div>
 
+
       <div class="input-group">
-        <label for="heightInput">身長（cm）</label>
+
+        <label for="heightInput">
+          身長（cm）
+        </label>
+
         <input
           id="heightInput"
           type="number"
-          min="100"
-          max="230"
           placeholder="例：170"
-        />
+        >
+
       </div>
 
+
       <div class="input-group">
-        <label for="weightInput">体重（kg）</label>
+
+        <label for="weightInput">
+          体重（kg）
+        </label>
+
         <input
           id="weightInput"
           type="number"
-          min="20"
-          max="300"
           step="0.1"
           placeholder="例：65"
-        />
+        >
+
       </div>
+
 
       <button
         id="profileSaveButton"
@@ -832,6 +1162,7 @@
       </button>
 
     </div>
+
 
     <div
       class="profile-status"
@@ -843,7 +1174,6 @@
 </section>
 
 
-<!-- メイン -->
 
 <main class="main">
 
@@ -864,6 +1194,7 @@
         1. 出発地点
       </label>
 
+
       <div class="location-box">
 
         <div
@@ -872,6 +1203,7 @@
         >
           地図上の好きな場所をクリックしてください
         </div>
+
 
         <button
           class="location-button"
@@ -885,27 +1217,44 @@
     </div>
 
 
+
     <div class="form-group">
 
       <label class="form-label">
         2. 散歩したい時間
       </label>
 
+
       <div class="time-grid">
 
-        <button class="time-button" data-time="15">
+        <button
+          class="time-button"
+          data-time="15"
+        >
           15分
         </button>
 
-        <button class="time-button active" data-time="30">
+
+        <button
+          class="time-button active"
+          data-time="30"
+        >
           30分
         </button>
 
-        <button class="time-button" data-time="45">
+
+        <button
+          class="time-button"
+          data-time="45"
+        >
           45分
         </button>
 
-        <button class="time-button" data-time="60">
+
+        <button
+          class="time-button"
+          data-time="60"
+        >
           60分
         </button>
 
@@ -914,11 +1263,13 @@
     </div>
 
 
+
     <div class="form-group">
 
       <label class="form-label">
         3. 歩くペース
       </label>
+
 
       <select id="pace">
 
@@ -926,7 +1277,10 @@
           のんびり
         </option>
 
-        <option value="4.5" selected>
+        <option
+          value="4.5"
+          selected
+        >
           普通
         </option>
 
@@ -939,43 +1293,57 @@
     </div>
 
 
+
     <div class="form-group">
 
       <label class="form-label">
         4. 今日の気分
       </label>
 
+
       <div class="options">
 
         <label class="option">
+
           <input
             type="checkbox"
             id="parkOption"
             checked
-          />
+          >
+
           🌳 緑のある場所を歩きたい
+
         </label>
 
+
         <label class="option">
+
           <input
             type="checkbox"
             id="quietOption"
-          />
+          >
+
           ☕ のんびり寄り道したい
+
         </label>
 
+
         <label class="option">
+
           <input
             type="checkbox"
             id="randomOption"
             checked
-          />
+          >
+
           🎲 毎回少し違うコース
+
         </label>
 
       </div>
 
     </div>
+
 
 
     <button
@@ -985,12 +1353,14 @@
       散歩コースをつくる
     </button>
 
+
     <button
       id="anotherButton"
       class="random-button"
     >
       ↻ 別のコースを考える
     </button>
+
 
     <div
       class="loading"
@@ -1002,13 +1372,40 @@
   </section>
 
 
+
   <section class="map-area">
 
     <div class="map-hint">
       👆 地図をクリックしてスタート地点を選択
     </div>
 
+
     <div id="map"></div>
+
+
+    <div
+      id="mapSummary"
+      class="map-summary"
+    >
+
+      <div class="map-summary-title">
+        今日の散歩
+      </div>
+
+      <div class="map-summary-main">
+
+        <span id="mapDistance">
+          -
+        </span>
+
+        <span id="mapDuration">
+          -
+        </span>
+
+      </div>
+
+    </div>
+
 
 
     <div
@@ -1030,11 +1427,13 @@
 
         </div>
 
+
         <div class="result-badge">
           周回ルート
         </div>
 
       </div>
+
 
 
       <div class="stats">
@@ -1046,8 +1445,15 @@
           </div>
 
           <div class="stat-value">
-            <span id="distanceValue">-</span>
-            <small>km</small>
+
+            <span id="distanceValue">
+              -
+            </span>
+
+            <small>
+              km
+            </small>
+
           </div>
 
         </div>
@@ -1060,8 +1466,15 @@
           </div>
 
           <div class="stat-value">
-            <span id="durationValue">-</span>
-            <small>分</small>
+
+            <span id="durationValue">
+              -
+            </span>
+
+            <small>
+              分
+            </small>
+
           </div>
 
         </div>
@@ -1074,8 +1487,15 @@
           </div>
 
           <div class="stat-value">
-            <span id="stepsValue">-</span>
-            <small>歩</small>
+
+            <span id="stepsValue">
+              -
+            </span>
+
+            <small>
+              歩
+            </small>
+
           </div>
 
         </div>
@@ -1088,8 +1508,15 @@
           </div>
 
           <div class="stat-value">
-            <span id="calorieValue">-</span>
-            <small>kcal</small>
+
+            <span id="calorieValue">
+              -
+            </span>
+
+            <small>
+              kcal
+            </small>
+
           </div>
 
         </div>
@@ -1097,11 +1524,11 @@
       </div>
 
 
+
       <div
         class="result-message"
         id="resultMessage"
-      >
-      </div>
+      ></div>
 
 
       <button
@@ -1118,7 +1545,6 @@
 </main>
 
 
-<!-- 履歴 -->
 
 <section class="history-section">
 
@@ -1130,6 +1556,7 @@
         最近の散歩
       </h2>
 
+
       <button
         class="clear-button"
         id="clearHistoryButton"
@@ -1138,6 +1565,7 @@
       </button>
 
     </div>
+
 
     <div
       class="history-list"
@@ -1149,913 +1577,386 @@
 </section>
 
 
+
 <div class="notice">
-  消費カロリー・歩数は目安です。実際の消費量は体格・路面・坂道・体調・歩き方などで変わります。
-  地図データ © OpenStreetMap contributors。
-  歩行ルートは公開ルーティングサービスを利用した試作版です。
+
+  消費カロリー・歩数は目安です。
+  実際の消費量は体格・路面・坂道・体調・歩き方などで変わります。
+  地図データ © OpenStreetMap contributors / CARTO。
   実際に歩く際は道路状況・通行止め・私有地・工事・安全状況などを現地で確認してください。
+
 </div>
 
 
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  crossorigin=""
-></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
 <script>
 
-  /* =========================================
-     STORAGE
-  ========================================= */
+const PROFILE_KEY =
+  "sanpo_profile_v1";
 
-  const PROFILE_KEY =
-    "sanpo_profile_v1";
-
-  const HISTORY_KEY =
-    "sanpo_history_v1";
+const HISTORY_KEY =
+  "sanpo_history_v1";
 
 
-  function getProfile() {
+/* =========================
+   PROFILE
+========================= */
 
-    const raw =
-      localStorage.getItem(
-        PROFILE_KEY
-      );
+function getProfile() {
 
-    if (!raw) {
+  const raw =
+    localStorage.getItem(
+      PROFILE_KEY
+    );
 
-      return {
-        age: null,
-        height: null,
-        weight: null
-      };
+  if (!raw) {
 
-    }
+    return {
+      age: null,
+      height: null,
+      weight: null
+    };
 
-    try {
+  }
 
-      return JSON.parse(raw);
+  try {
 
-    } catch {
+    return JSON.parse(raw);
 
-      return {
-        age: null,
-        height: null,
-        weight: null
-      };
+  } catch {
 
-    }
+    return {
+      age: null,
+      height: null,
+      weight: null
+    };
+
+  }
+
+}
+
+
+
+function saveProfile() {
+
+  const age =
+    Number(
+      document.getElementById(
+        "ageInput"
+      ).value
+    );
+
+  const height =
+    Number(
+      document.getElementById(
+        "heightInput"
+      ).value
+    );
+
+  const weight =
+    Number(
+      document.getElementById(
+        "weightInput"
+      ).value
+    );
+
+
+  if (
+    !age ||
+    !height ||
+    !weight
+  ) {
+
+    alert(
+      "年齢・身長・体重をすべて入力してください。"
+    );
+
+    return;
 
   }
 
 
-  function saveProfile() {
-
-    const age =
-      Number(
-        document.getElementById(
-          "ageInput"
-        ).value
-      );
-
-    const height =
-      Number(
-        document.getElementById(
-          "heightInput"
-        ).value
-      );
-
-    const weight =
-      Number(
-        document.getElementById(
-          "weightInput"
-        ).value
-      );
-
-
-    if (
-      !age ||
-      !height ||
-      !weight
-    ) {
-
-      alert(
-        "年齢・身長・体重をすべて入力してください。"
-      );
-
-      return;
-
-    }
-
-
-    const profile = {
+  localStorage.setItem(
+    PROFILE_KEY,
+    JSON.stringify({
       age,
       height,
       weight
-    };
-
-
-    localStorage.setItem(
-      PROFILE_KEY,
-      JSON.stringify(profile)
-    );
-
-
-    document.getElementById(
-      "profileStatus"
-    ).textContent =
-      "✓ プロフィールを保存しました";
-
-
-    setTimeout(
-      function() {
-
-        document.getElementById(
-          "profileStatus"
-        ).textContent = "";
-
-      },
-      2500
-    );
-
-  }
-
-
-  function loadProfile() {
-
-    const profile =
-      getProfile();
-
-
-    if (profile.age) {
-
-      document.getElementById(
-        "ageInput"
-      ).value =
-        profile.age;
-
-    }
-
-
-    if (profile.height) {
-
-      document.getElementById(
-        "heightInput"
-      ).value =
-        profile.height;
-
-    }
-
-
-    if (profile.weight) {
-
-      document.getElementById(
-        "weightInput"
-      ).value =
-        profile.weight;
-
-    }
-
-  }
+    })
+  );
 
 
   document.getElementById(
-    "profileSaveButton"
-  ).addEventListener(
-    "click",
-    saveProfile
+    "profileStatus"
+  ).textContent =
+    "✓ プロフィールを保存しました";
+
+
+  setTimeout(
+    () => {
+
+      document.getElementById(
+        "profileStatus"
+      ).textContent = "";
+
+    },
+    2500
   );
 
+}
 
 
-  /* =========================================
-     MAP
-  ========================================= */
 
-  const defaultLat =
-    35.681236;
+function loadProfile() {
 
-  const defaultLng =
-    139.767125;
+  const profile =
+    getProfile();
 
 
-  let startPoint = null;
+  if (profile.age) {
 
-  let startMarker = null;
+    document.getElementById(
+      "ageInput"
+    ).value =
+      profile.age;
 
-  let routeLayer = null;
-
-  let waypointLayers = [];
-
-  let selectedTime = 30;
-
-  let currentWalk = null;
+  }
 
 
-  const map =
-    L.map("map")
-      .setView(
-        [
-          defaultLat,
-          defaultLng
-        ],
-        14
-      );
+  if (profile.height) {
+
+    document.getElementById(
+      "heightInput"
+    ).value =
+      profile.height;
+
+  }
 
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  if (profile.weight) {
+
+    document.getElementById(
+      "weightInput"
+    ).value =
+      profile.weight;
+
+  }
+
+}
+
+
+
+document.getElementById(
+  "profileSaveButton"
+).addEventListener(
+  "click",
+  saveProfile
+);
+
+
+
+/* =========================
+   MAP
+========================= */
+
+const defaultLat =
+  35.681236;
+
+const defaultLng =
+  139.767125;
+
+
+let startPoint =
+  null;
+
+let startMarker =
+  null;
+
+let routeShadow =
+  null;
+
+let routeLayer =
+  null;
+
+let waypointLayers =
+  [];
+
+let selectedTime =
+  30;
+
+let currentWalk =
+  null;
+
+
+
+const map =
+  L.map(
+    "map",
     {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      zoomControl: false
     }
-  ).addTo(map);
-
-
-
-  map.on(
-    "click",
-    function(event) {
-
-      setStartPoint(
-        event.latlng.lat,
-        event.latlng.lng
-      );
-
-    }
+  )
+  .setView(
+    [
+      defaultLat,
+      defaultLng
+    ],
+    14
   );
 
 
+L.control.zoom({
+  position: "bottomright"
+}).addTo(map);
 
-  function setStartPoint(
+
+
+/* =========================
+   CARTO VOYAGER MAP
+========================= */
+
+L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+  {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+
+    subdomains:
+      "abcd",
+
+    maxZoom:
+      20
+  }
+).addTo(map);
+
+
+
+const sanpoIcon =
+  L.divIcon({
+
+    className:
+      "sanpo-div-icon",
+
+    html:
+      `
+      <div class="sanpo-marker">
+        <div class="sanpo-marker-inner">
+          🚶
+        </div>
+      </div>
+      `,
+
+    iconSize:
+      [46,46],
+
+    iconAnchor:
+      [23,43]
+
+  });
+
+
+
+map.on(
+  "click",
+  function(event) {
+
+    setStartPoint(
+      event.latlng.lat,
+      event.latlng.lng
+    );
+
+  }
+);
+
+
+
+function setStartPoint(
+  lat,
+  lng
+) {
+
+  startPoint = {
     lat,
     lng
-  ) {
-
-    startPoint = {
-      lat,
-      lng
-    };
+  };
 
 
-    if (startMarker) {
+  if (startMarker) {
 
-      map.removeLayer(
-        startMarker
-      );
+    map.removeLayer(
+      startMarker
+    );
 
-    }
-
-
-    startMarker =
-      L.marker(
-        [
-          lat,
-          lng
-        ]
-      )
-      .addTo(map)
-      .bindPopup(
-        "散歩スタート"
-      )
-      .openPopup();
+  }
 
 
-    map.setView(
+  startMarker =
+    L.marker(
       [
         lat,
         lng
       ],
-      15
-    );
-
-
-    const status =
-      document.getElementById(
-        "locationStatus"
-      );
-
-
-    status.textContent =
-      "スタート地点を設定しました";
-
-    status.classList.add(
-      "active"
-    );
-
-  }
-
-
-
-  /* =========================================
-     現在地
-  ========================================= */
-
-  document.getElementById(
-    "locationButton"
-  ).addEventListener(
-    "click",
-    function() {
-
-      if (
-        !navigator.geolocation
-      ) {
-
-        alert(
-          "このブラウザでは現在地を取得できません。"
-        );
-
-        return;
-
+      {
+        icon:
+          sanpoIcon
       }
+    )
+    .addTo(map)
+    .bindPopup(
+      "<b>SANPO START</b><br>ここから散歩スタート！"
+    )
+    .openPopup();
 
 
-      const button =
-        this;
-
-
-      button.textContent =
-        "現在地を取得しています...";
-
-      button.disabled =
-        true;
-
-
-      navigator.geolocation
-        .getCurrentPosition(
-
-          function(position) {
-
-            const lat =
-              position.coords.latitude;
-
-            const lng =
-              position.coords.longitude;
-
-
-            setStartPoint(
-              lat,
-              lng
-            );
-
-
-            button.textContent =
-              "✓ 現在地を設定しました";
-
-            button.disabled =
-              false;
-
-          },
-
-          function(error) {
-
-            console.error(
-              error
-            );
-
-
-            alert(
-              "現在地を取得できませんでした。地図をクリックしてスタート地点を選んでください。"
-            );
-
-
-            button.textContent =
-              "📍 現在地を使う";
-
-            button.disabled =
-              false;
-
-          },
-
-          {
-            enableHighAccuracy:
-              true,
-
-            timeout:
-              10000,
-
-            maximumAge:
-              60000
-          }
-
-        );
-
+  map.flyTo(
+    [
+      lat,
+      lng
+    ],
+    15,
+    {
+      duration:
+        .7
     }
   );
 
 
-
-  /* =========================================
-     時間
-  ========================================= */
-
-  document.querySelectorAll(
-    ".time-button"
-  ).forEach(
-    function(button) {
-
-      button.addEventListener(
-        "click",
-        function() {
-
-          document
-            .querySelectorAll(
-              ".time-button"
-            )
-            .forEach(
-              function(btn) {
-
-                btn.classList.remove(
-                  "active"
-                );
-
-              }
-            );
+  const status =
+    document.getElementById(
+      "locationStatus"
+    );
 
 
-          button.classList.add(
-            "active"
-          );
+  status.textContent =
+    "✓ スタート地点を設定しました";
 
-
-          selectedTime =
-            Number(
-              button.dataset.time
-            );
-
-        }
-      );
-
-    }
+  status.classList.add(
+    "active"
   );
 
+}
 
 
-  /* =========================================
-     緯度経度計算
-  ========================================= */
 
-  function destinationPoint(
-    lat,
-    lng,
-    distanceKm,
-    bearingDegrees
-  ) {
+/* =========================
+   GEOLOCATION
+========================= */
 
-    const earthRadius =
-      6371;
-
-    const bearing =
-      bearingDegrees *
-      Math.PI /
-      180;
-
-    const lat1 =
-      lat *
-      Math.PI /
-      180;
-
-    const lng1 =
-      lng *
-      Math.PI /
-      180;
-
-    const angularDistance =
-      distanceKm /
-      earthRadius;
-
-
-    const lat2 =
-      Math.asin(
-
-        Math.sin(lat1) *
-        Math.cos(
-          angularDistance
-        )
-
-        +
-
-        Math.cos(lat1) *
-        Math.sin(
-          angularDistance
-        ) *
-        Math.cos(
-          bearing
-        )
-
-      );
-
-
-    const lng2 =
-      lng1 +
-
-      Math.atan2(
-
-        Math.sin(
-          bearing
-        ) *
-        Math.sin(
-          angularDistance
-        ) *
-        Math.cos(lat1),
-
-        Math.cos(
-          angularDistance
-        )
-
-        -
-
-        Math.sin(lat1) *
-        Math.sin(lat2)
-
-      );
-
-
-    return {
-
-      lat:
-        lat2 *
-        180 /
-        Math.PI,
-
-      lng:
-        lng2 *
-        180 /
-        Math.PI
-
-    };
-
-  }
-
-
-
-  function createWaypoints(
-    lat,
-    lng,
-    targetKm
-  ) {
-
-    const radius =
-      Math.max(
-        0.18,
-        targetKm / 7
-      );
-
-
-    const randomEnabled =
-      document.getElementById(
-        "randomOption"
-      ).checked;
-
-
-    const baseAngle =
-      randomEnabled
-        ? Math.random() * 360
-        : 20;
-
-
-    const point1 =
-      destinationPoint(
-        lat,
-        lng,
-        radius,
-        baseAngle
-      );
-
-
-    const point2 =
-      destinationPoint(
-        lat,
-        lng,
-        radius * 1.15,
-        baseAngle + 105
-      );
-
-
-    const point3 =
-      destinationPoint(
-        lat,
-        lng,
-        radius,
-        baseAngle + 220
-      );
-
-
-    return [
-
-      {
-        lat,
-        lon: lng
-      },
-
-      {
-        lat:
-          point1.lat,
-
-        lon:
-          point1.lng
-      },
-
-      {
-        lat:
-          point2.lat,
-
-        lon:
-          point2.lng
-      },
-
-      {
-        lat:
-          point3.lat,
-
-        lon:
-          point3.lng
-      },
-
-      {
-        lat,
-        lon: lng
-      }
-
-    ];
-
-  }
-
-
-
-  /* =========================================
-     Polyline decoder
-  ========================================= */
-
-  function decodePolyline6(
-    encoded
-  ) {
-
-    let index = 0;
-
-    let lat = 0;
-
-    let lng = 0;
-
-    const coordinates = [];
-
-
-    while (
-      index <
-      encoded.length
-    ) {
-
-      let result = 0;
-
-      let shift = 0;
-
-      let byte;
-
-
-      do {
-
-        byte =
-          encoded.charCodeAt(
-            index++
-          ) - 63;
-
-
-        result |=
-          (
-            byte &
-            0x1f
-          ) << shift;
-
-
-        shift += 5;
-
-      } while (
-        byte >=
-        0x20
-      );
-
-
-      const deltaLat =
-        (
-          result & 1
-        )
-          ? ~(
-              result >> 1
-            )
-          : result >> 1;
-
-
-      lat +=
-        deltaLat;
-
-
-      result = 0;
-
-      shift = 0;
-
-
-      do {
-
-        byte =
-          encoded.charCodeAt(
-            index++
-          ) - 63;
-
-
-        result |=
-          (
-            byte &
-            0x1f
-          ) << shift;
-
-
-        shift += 5;
-
-      } while (
-        byte >=
-        0x20
-      );
-
-
-      const deltaLng =
-        (
-          result & 1
-        )
-          ? ~(
-              result >> 1
-            )
-          : result >> 1;
-
-
-      lng +=
-        deltaLng;
-
-
-      coordinates.push(
-        [
-          lat / 1e6,
-          lng / 1e6
-        ]
-      );
-
-    }
-
-
-    return coordinates;
-
-  }
-
-
-
-  function clearRoute() {
+document.getElementById(
+  "locationButton"
+).addEventListener(
+  "click",
+  function() {
 
     if (
-      routeLayer
-    ) {
-
-      map.removeLayer(
-        routeLayer
-      );
-
-      routeLayer =
-        null;
-
-    }
-
-
-    waypointLayers
-      .forEach(
-        function(layer) {
-
-          map.removeLayer(
-            layer
-          );
-
-        }
-      );
-
-
-    waypointLayers = [];
-
-  }
-
-
-
-  /* =========================================
-     歩数計算
-  ========================================= */
-
-  function calculateSteps(
-    distanceKm
-  ) {
-
-    const profile =
-      getProfile();
-
-
-    let strideMeters =
-      0.72;
-
-
-    if (
-      profile.height
-    ) {
-
-      strideMeters =
-        profile.height *
-        0.415 /
-        100;
-
-    }
-
-
-    const steps =
-      distanceKm *
-      1000 /
-      strideMeters;
-
-
-    return Math.round(
-      steps
-    );
-
-  }
-
-
-
-  /* =========================================
-     消費カロリー
-  ========================================= */
-
-  function calculateCalories(
-    durationMinutes,
-    speed
-  ) {
-
-    const profile =
-      getProfile();
-
-
-    const weight =
-      profile.weight ||
-      60;
-
-
-    let met;
-
-
-    if (
-      speed <= 3.8
-    ) {
-
-      met = 3.0;
-
-    } else if (
-      speed <= 4.8
-    ) {
-
-      met = 3.5;
-
-    } else {
-
-      met = 4.3;
-
-    }
-
-
-    const hours =
-      durationMinutes /
-      60;
-
-
-    const calories =
-      met *
-      weight *
-      hours;
-
-
-    return Math.round(
-      calories
-    );
-
-  }
-
-
-
-  /* =========================================
-     ルート生成
-  ========================================= */
-
-  async function generateRoute() {
-
-    if (
-      !startPoint
+      !navigator.geolocation
     ) {
 
       alert(
-        "まず地図をクリックするか、現在地を設定してください！"
+        "このブラウザでは現在地を取得できません。"
       );
 
       return;
@@ -2064,715 +1965,1124 @@
 
 
     const button =
-      document.getElementById(
-        "generateButton"
-      );
-
-
-    const loading =
-      document.getElementById(
-        "loading"
-      );
-
-
-    button.disabled =
-      true;
-
-    loading.classList.add(
-      "show"
-    );
-
-
-    clearRoute();
-
-
-    try {
-
-      const speed =
-        Number(
-          document.getElementById(
-            "pace"
-          ).value
-        );
-
-
-      const targetDistance =
-        speed *
-        (
-          selectedTime /
-          60
-        );
-
-
-      const locations =
-        createWaypoints(
-
-          startPoint.lat,
-
-          startPoint.lng,
-
-          targetDistance
-
-        );
-
-
-      const requestData = {
-
-        locations,
-
-        costing:
-          "pedestrian",
-
-        units:
-          "kilometers",
-
-        language:
-          "ja-JP",
-
-        directions_type:
-          "none"
-
-      };
-
-
-      const response =
-        await fetch(
-          "https://valhalla1.openstreetmap.de/route",
-          {
-            method:
-              "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify(
-                requestData
-              )
-          }
-        );
-
-
-      if (
-        !response.ok
-      ) {
-
-        throw new Error(
-          "ルートAPIエラー"
-        );
-
-      }
-
-
-      const data =
-        await response.json();
-
-
-      if (
-        !data.trip ||
-        !data.trip.legs
-      ) {
-
-        throw new Error(
-          "ルートが見つかりませんでした"
-        );
-
-      }
-
-
-      let routeCoordinates = [];
-
-
-      data.trip.legs
-        .forEach(
-          function(leg) {
-
-            if (
-              leg.shape
-            ) {
-
-              routeCoordinates =
-                routeCoordinates.concat(
-                  decodePolyline6(
-                    leg.shape
-                  )
-                );
-
-            }
-
-          }
-        );
-
-
-      if (
-        routeCoordinates.length === 0
-      ) {
-
-        throw new Error(
-          "ルート形状を取得できませんでした"
-        );
-
-      }
-
-
-      routeLayer =
-        L.polyline(
-          routeCoordinates,
-          {
-            color:
-              "#1f6b4f",
-
-            weight:
-              6,
-
-            opacity:
-              0.9,
-
-            lineJoin:
-              "round",
-
-            lineCap:
-              "round"
-          }
-        )
-        .addTo(map);
-
-
-      locations
-        .slice(
-          1,
-          -1
-        )
-        .forEach(
-          function(point) {
-
-            const circle =
-              L.circleMarker(
-                [
-                  point.lat,
-                  point.lon
-                ],
-                {
-                  radius:
-                    5,
-
-                  color:
-                    "#ffffff",
-
-                  weight:
-                    2,
-
-                  fillColor:
-                    "#1f6b4f",
-
-                  fillOpacity:
-                    1
-                }
-              )
-              .addTo(map);
-
-
-            waypointLayers.push(
-              circle
-            );
-
-          }
-        );
-
-
-      map.fitBounds(
-        routeLayer.getBounds(),
-        {
-          padding:
-            [
-              40,
-              40
-            ]
-        }
-      );
-
-
-      const distance =
-        Number(
-          data.trip.summary.length
-        );
-
-
-      const durationMinutes =
-        Math.round(
-          data.trip.summary.time /
-          60
-        );
-
-
-      const steps =
-        calculateSteps(
-          distance
-        );
-
-
-      const calories =
-        calculateCalories(
-          durationMinutes,
-          speed
-        );
-
-
-      currentWalk = {
-
-        distance,
-
-        duration:
-          durationMinutes,
-
-        steps,
-
-        calories,
-
-        speed
-
-      };
-
-
-      showResult(
-        currentWalk
-      );
-
-
-    } catch (
-      error
-    ) {
-
-      console.error(
-        error
-      );
-
-
-      alert(
-        "うまく散歩コースを作れませんでした。\n別の場所を選ぶか、もう一度試してみてください。"
-      );
-
-
-    } finally {
-
-      button.disabled =
-        false;
-
-
-      loading.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-
-
-
-  /* =========================================
-     結果
-  ========================================= */
-
-  function showResult(
-    walk
-  ) {
-
-    document.getElementById(
-      "distanceValue"
-    ).textContent =
-      walk.distance.toFixed(
-        1
-      );
-
-
-    document.getElementById(
-      "durationValue"
-    ).textContent =
-      walk.duration;
-
-
-    document.getElementById(
-      "stepsValue"
-    ).textContent =
-      walk.steps.toLocaleString();
-
-
-    document.getElementById(
-      "calorieValue"
-    ).textContent =
-      walk.calories;
-
-
-    let message =
-      "スタート地点に戻ってくる周回コースです。";
-
-
-    const profile =
-      getProfile();
-
-
-    if (
-      !profile.weight
-    ) {
-
-      message +=
-        " 体重をプロフィールに保存すると、消費カロリーをより自分向けに計算できます。";
-
-    } else {
-
-      message +=
-        " この散歩を終えたら、下のボタンから記録に残せます。";
-
-    }
-
-
-    document.getElementById(
-      "resultMessage"
-    ).textContent =
-      message;
-
-
-    document.getElementById(
-      "resultCard"
-    ).classList.add(
-      "show"
-    );
-
-
-    const recordButton =
-      document.getElementById(
-        "recordButton"
-      );
-
-
-    recordButton.disabled =
-      false;
-
-
-    recordButton.textContent =
-      "この散歩を記録する";
-
-  }
-
-
-
-  /* =========================================
-     履歴
-  ========================================= */
-
-  function getHistory() {
-
-    const raw =
-      localStorage.getItem(
-        HISTORY_KEY
-      );
-
-
-    if (
-      !raw
-    ) {
-
-      return [];
-
-    }
-
-
-    try {
-
-      return JSON.parse(
-        raw
-      );
-
-    } catch {
-
-      return [];
-
-    }
-
-  }
-
-
-
-  function saveHistory(
-    history
-  ) {
-
-    localStorage.setItem(
-      HISTORY_KEY,
-      JSON.stringify(
-        history
-      )
-    );
-
-  }
-
-
-
-  function recordCurrentWalk() {
-
-    if (
-      !currentWalk
-    ) {
-
-      return;
-
-    }
-
-
-    const history =
-      getHistory();
-
-
-    history.unshift(
-      {
-        id:
-          Date.now(),
-
-        date:
-          new Date()
-            .toISOString(),
-
-        distance:
-          currentWalk.distance,
-
-        duration:
-          currentWalk.duration,
-
-        steps:
-          currentWalk.steps,
-
-        calories:
-          currentWalk.calories
-      }
-    );
-
-
-    saveHistory(
-      history
-    );
-
-
-    renderHistory();
-
-    updateDashboard();
-
-
-    const button =
-      document.getElementById(
-        "recordButton"
-      );
+      this;
 
 
     button.textContent =
-      "✓ 記録しました";
+      "現在地を取得しています...";
 
     button.disabled =
       true;
 
+
+    navigator.geolocation
+      .getCurrentPosition(
+
+        function(position) {
+
+          setStartPoint(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+
+
+          button.textContent =
+            "✓ 現在地を設定しました";
+
+          button.disabled =
+            false;
+
+        },
+
+        function() {
+
+          alert(
+            "現在地を取得できませんでした。地図をクリックしてスタート地点を設定してください。"
+          );
+
+
+          button.textContent =
+            "📍 現在地を使う";
+
+          button.disabled =
+            false;
+
+        },
+
+        {
+          enableHighAccuracy:
+            true,
+
+          timeout:
+            10000,
+
+          maximumAge:
+            60000
+        }
+
+      );
+
+  }
+);
+
+
+
+/* =========================
+   TIME
+========================= */
+
+document.querySelectorAll(
+  ".time-button"
+).forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      function() {
+
+        document
+          .querySelectorAll(
+            ".time-button"
+          )
+          .forEach(
+            btn => {
+
+              btn.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+
+        this.classList.add(
+          "active"
+        );
+
+
+        selectedTime =
+          Number(
+            this.dataset.time
+          );
+
+      }
+    );
+
+  }
+);
+
+
+
+/* =========================
+   ROUTE CALCULATION
+========================= */
+
+function destinationPoint(
+  lat,
+  lng,
+  distanceKm,
+  bearingDegrees
+) {
+
+  const earthRadius =
+    6371;
+
+  const bearing =
+    bearingDegrees *
+    Math.PI /
+    180;
+
+  const lat1 =
+    lat *
+    Math.PI /
+    180;
+
+  const lng1 =
+    lng *
+    Math.PI /
+    180;
+
+  const angularDistance =
+    distanceKm /
+    earthRadius;
+
+
+  const lat2 =
+    Math.asin(
+
+      Math.sin(lat1) *
+      Math.cos(
+        angularDistance
+      )
+
+      +
+
+      Math.cos(lat1) *
+      Math.sin(
+        angularDistance
+      ) *
+      Math.cos(
+        bearing
+      )
+
+    );
+
+
+  const lng2 =
+    lng1 +
+
+    Math.atan2(
+
+      Math.sin(
+        bearing
+      ) *
+      Math.sin(
+        angularDistance
+      ) *
+      Math.cos(lat1),
+
+      Math.cos(
+        angularDistance
+      )
+
+      -
+
+      Math.sin(lat1) *
+      Math.sin(lat2)
+
+    );
+
+
+  return {
+
+    lat:
+      lat2 *
+      180 /
+      Math.PI,
+
+    lng:
+      lng2 *
+      180 /
+      Math.PI
+
+  };
+
+}
+
+
+
+function createWaypoints(
+  lat,
+  lng,
+  targetKm
+) {
+
+  const radius =
+    Math.max(
+      .18,
+      targetKm / 7
+    );
+
+
+  const randomEnabled =
+    document.getElementById(
+      "randomOption"
+    ).checked;
+
+
+  const baseAngle =
+    randomEnabled
+      ? Math.random() * 360
+      : 20;
+
+
+  const point1 =
+    destinationPoint(
+      lat,
+      lng,
+      radius,
+      baseAngle
+    );
+
+
+  const point2 =
+    destinationPoint(
+      lat,
+      lng,
+      radius * 1.15,
+      baseAngle + 105
+    );
+
+
+  const point3 =
+    destinationPoint(
+      lat,
+      lng,
+      radius,
+      baseAngle + 220
+    );
+
+
+  return [
+
+    {
+      lat,
+      lon: lng
+    },
+
+    {
+      lat: point1.lat,
+      lon: point1.lng
+    },
+
+    {
+      lat: point2.lat,
+      lon: point2.lng
+    },
+
+    {
+      lat: point3.lat,
+      lon: point3.lng
+    },
+
+    {
+      lat,
+      lon: lng
+    }
+
+  ];
+
+}
+
+
+
+/* =========================
+   POLYLINE
+========================= */
+
+function decodePolyline6(
+  encoded
+) {
+
+  let index = 0;
+
+  let lat = 0;
+
+  let lng = 0;
+
+  const coordinates =
+    [];
+
+
+  while (
+    index <
+    encoded.length
+  ) {
+
+    let result = 0;
+
+    let shift = 0;
+
+    let byte;
+
+
+    do {
+
+      byte =
+        encoded.charCodeAt(
+          index++
+        ) - 63;
+
+
+      result |=
+        (
+          byte &
+          0x1f
+        ) << shift;
+
+
+      shift += 5;
+
+    } while (
+      byte >=
+      0x20
+    );
+
+
+    lat +=
+      (
+        result & 1
+      )
+        ? ~(
+            result >> 1
+          )
+        : result >> 1;
+
+
+    result = 0;
+
+    shift = 0;
+
+
+    do {
+
+      byte =
+        encoded.charCodeAt(
+          index++
+        ) - 63;
+
+
+      result |=
+        (
+          byte &
+          0x1f
+        ) << shift;
+
+
+      shift += 5;
+
+    } while (
+      byte >=
+      0x20
+    );
+
+
+    lng +=
+      (
+        result & 1
+      )
+        ? ~(
+            result >> 1
+          )
+        : result >> 1;
+
+
+    coordinates.push(
+      [
+        lat / 1e6,
+        lng / 1e6
+      ]
+    );
+
   }
 
 
+  return coordinates;
 
-  function renderHistory() {
-
-    const history =
-      getHistory();
+}
 
 
-    const container =
-      document.getElementById(
-        "historyList"
+
+function clearRoute() {
+
+  if (
+    routeShadow
+  ) {
+
+    map.removeLayer(
+      routeShadow
+    );
+
+    routeShadow =
+      null;
+
+  }
+
+
+  if (
+    routeLayer
+  ) {
+
+    map.removeLayer(
+      routeLayer
+    );
+
+    routeLayer =
+      null;
+
+  }
+
+
+  waypointLayers
+    .forEach(
+      layer => {
+
+        map.removeLayer(
+          layer
+        );
+
+      }
+    );
+
+
+  waypointLayers =
+    [];
+
+
+  document.getElementById(
+    "mapSummary"
+  ).classList.remove(
+    "show"
+  );
+
+}
+
+
+
+/* =========================
+   STEPS + CALORIES
+========================= */
+
+function calculateSteps(
+  distanceKm
+) {
+
+  const profile =
+    getProfile();
+
+
+  let strideMeters =
+    .72;
+
+
+  if (
+    profile.height
+  ) {
+
+    strideMeters =
+      profile.height *
+      .415 /
+      100;
+
+  }
+
+
+  return Math.round(
+    distanceKm *
+    1000 /
+    strideMeters
+  );
+
+}
+
+
+
+function calculateCalories(
+  durationMinutes,
+  speed
+) {
+
+  const profile =
+    getProfile();
+
+
+  const weight =
+    profile.weight ||
+    60;
+
+
+  let met;
+
+
+  if (
+    speed <= 3.8
+  ) {
+
+    met = 3.0;
+
+  } else if (
+    speed <= 4.8
+  ) {
+
+    met = 3.5;
+
+  } else {
+
+    met = 4.3;
+
+  }
+
+
+  return Math.round(
+
+    met *
+    weight *
+    (
+      durationMinutes /
+      60
+    )
+
+  );
+
+}
+
+
+
+/* =========================
+   GENERATE ROUTE
+========================= */
+
+async function generateRoute() {
+
+  if (
+    !startPoint
+  ) {
+
+    alert(
+      "まず現在地またはスタート地点を設定してください！"
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "generateButton"
+    );
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+
+  button.disabled =
+    true;
+
+  loading.classList.add(
+    "show"
+  );
+
+
+  clearRoute();
+
+
+  try {
+
+    const speed =
+      Number(
+        document.getElementById(
+          "pace"
+        ).value
       );
 
 
-    container.innerHTML =
-      "";
+    const targetDistance =
+      speed *
+      (
+        selectedTime /
+        60
+      );
+
+
+    const locations =
+      createWaypoints(
+
+        startPoint.lat,
+
+        startPoint.lng,
+
+        targetDistance
+
+      );
+
+
+    const requestData = {
+
+      locations,
+
+      costing:
+        "pedestrian",
+
+      units:
+        "kilometers",
+
+      language:
+        "ja-JP",
+
+      directions_type:
+        "none"
+
+    };
+
+
+    const response =
+      await fetch(
+        "https://valhalla1.openstreetmap.de/route",
+        {
+          method:
+            "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify(
+              requestData
+            )
+
+        }
+      );
 
 
     if (
-      history.length === 0
+      !response.ok
     ) {
 
-      container.innerHTML =
-        '<div class="history-empty">まだ散歩記録がありません。最初の散歩を記録してみよう。</div>';
-
-      return;
+      throw new Error(
+        "ルートAPIエラー"
+      );
 
     }
 
 
-    history
+    const data =
+      await response.json();
+
+
+    let routeCoordinates =
+      [];
+
+
+    data.trip.legs
+      .forEach(
+        leg => {
+
+          routeCoordinates =
+            routeCoordinates.concat(
+              decodePolyline6(
+                leg.shape
+              )
+            );
+
+        }
+      );
+
+
+    /* WHITE OUTLINE */
+
+    routeShadow =
+      L.polyline(
+        routeCoordinates,
+        {
+          color:
+            "#ffffff",
+
+          weight:
+            11,
+
+          opacity:
+            .92,
+
+          lineJoin:
+            "round",
+
+          lineCap:
+            "round"
+        }
+      )
+      .addTo(map);
+
+
+    /* GREEN ROUTE */
+
+    routeLayer =
+      L.polyline(
+        routeCoordinates,
+        {
+          color:
+            "#1f6b4f",
+
+          weight:
+            6,
+
+          opacity:
+            1,
+
+          lineJoin:
+            "round",
+
+          lineCap:
+            "round"
+        }
+      )
+      .addTo(map);
+
+
+    locations
       .slice(
-        0,
-        10
+        1,
+        -1
       )
       .forEach(
-        function(item) {
+        point => {
 
-          const date =
-            new Date(
-              item.date
-            );
-
-
-          const dateText =
-            date.toLocaleDateString(
-              "ja-JP",
+          const circle =
+            L.circleMarker(
+              [
+                point.lat,
+                point.lon
+              ],
               {
-                month:
-                  "numeric",
+                radius:
+                  6,
 
-                day:
-                  "numeric",
+                color:
+                  "#ffffff",
 
-                weekday:
-                  "short"
+                weight:
+                  3,
+
+                fillColor:
+                  "#1f6b4f",
+
+                fillOpacity:
+                  1
               }
-            );
+            )
+            .addTo(map);
 
 
-          const div =
-            document.createElement(
-              "div"
-            );
-
-
-          div.className =
-            "history-item";
-
-
-          div.innerHTML = `
-
-            <div class="history-date">
-              ${dateText}
-            </div>
-
-            <div class="history-value">
-              <span>距離</span>
-              ${Number(item.distance).toFixed(1)} km
-            </div>
-
-            <div class="history-value">
-              <span>時間</span>
-              ${item.duration} 分
-            </div>
-
-            <div class="history-value">
-              <span>歩数</span>
-              ${Number(item.steps).toLocaleString()} 歩
-            </div>
-
-            <div class="history-value">
-              <span>消費</span>
-              ${item.calories} kcal
-            </div>
-
-          `;
-
-
-          container.appendChild(
-            div
+          waypointLayers.push(
+            circle
           );
 
         }
       );
 
-  }
 
-
-
-  /* =========================================
-     今週・今月集計
-  ========================================= */
-
-  function isSameMonth(
-    dateA,
-    dateB
-  ) {
-
-    return (
-      dateA.getFullYear() ===
-      dateB.getFullYear()
-
-      &&
-
-      dateA.getMonth() ===
-      dateB.getMonth()
+    map.fitBounds(
+      routeLayer.getBounds(),
+      {
+        padding:
+          [
+            45,
+            45
+          ]
+      }
     );
 
-  }
 
-
-
-  function getStartOfWeek(
-    date
-  ) {
-
-    const result =
-      new Date(
-        date
+    const distance =
+      Number(
+        data.trip.summary.length
       );
 
 
-    const day =
-      result.getDay();
+    const durationMinutes =
+      Math.round(
+        data.trip.summary.time /
+        60
+      );
 
 
-    const diff =
-      day === 0
-        ? -6
-        : 1 - day;
+    const steps =
+      calculateSteps(
+        distance
+      );
 
 
-    result.setDate(
-      result.getDate() +
-      diff
+    const calories =
+      calculateCalories(
+        durationMinutes,
+        speed
+      );
+
+
+    currentWalk = {
+
+      distance,
+
+      duration:
+        durationMinutes,
+
+      steps,
+
+      calories,
+
+      speed
+
+    };
+
+
+    showResult(
+      currentWalk
     );
 
 
-    result.setHours(
-      0,
-      0,
-      0,
-      0
+  } catch(error) {
+
+    console.error(
+      error
     );
 
 
-    return result;
+    alert(
+      "散歩コースを作れませんでした。\nもう一度試してください。"
+    );
+
+
+  } finally {
+
+    button.disabled =
+      false;
+
+    loading.classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+
+/* =========================
+   RESULT
+========================= */
+
+function showResult(
+  walk
+) {
+
+  document.getElementById(
+    "distanceValue"
+  ).textContent =
+    walk.distance.toFixed(
+      1
+    );
+
+
+  document.getElementById(
+    "durationValue"
+  ).textContent =
+    walk.duration;
+
+
+  document.getElementById(
+    "stepsValue"
+  ).textContent =
+    walk.steps.toLocaleString();
+
+
+  document.getElementById(
+    "calorieValue"
+  ).textContent =
+    walk.calories;
+
+
+  document.getElementById(
+    "mapDistance"
+  ).textContent =
+    walk.distance.toFixed(
+      1
+    ) +
+    " km";
+
+
+  document.getElementById(
+    "mapDuration"
+  ).textContent =
+    walk.duration +
+    " 分";
+
+
+  document.getElementById(
+    "mapSummary"
+  ).classList.add(
+    "show"
+  );
+
+
+  document.getElementById(
+    "resultMessage"
+  ).textContent =
+    "スタート地点に戻る周回コースです。歩き終わったら、この散歩を記録できます。";
+
+
+  document.getElementById(
+    "resultCard"
+  ).classList.add(
+    "show"
+  );
+
+
+  const recordButton =
+    document.getElementById(
+      "recordButton"
+    );
+
+
+  recordButton.disabled =
+    false;
+
+
+  recordButton.textContent =
+    "この散歩を記録する";
+
+}
+
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function getHistory() {
+
+  const raw =
+    localStorage.getItem(
+      HISTORY_KEY
+    );
+
+
+  if (!raw) {
+
+    return [];
 
   }
 
 
+  try {
 
-  function updateDashboard() {
+    return JSON.parse(raw);
 
-    const history =
-      getHistory();
+  } catch {
 
+    return [];
 
-    const now =
-      new Date();
+  }
 
-
-    const startOfWeek =
-      getStartOfWeek(
-        now
-      );
+}
 
 
-    let weekDistance = 0;
 
-    let weekCalories = 0;
+function saveHistory(
+  history
+) {
 
-    let monthDistance = 0;
+  localStorage.setItem(
+    HISTORY_KEY,
+    JSON.stringify(
+      history
+    )
+  );
 
-    let monthCalories = 0;
+}
 
 
-    history.forEach(
-      function(item) {
+
+function recordCurrentWalk() {
+
+  if (
+    !currentWalk
+  ) {
+
+    return;
+
+  }
+
+
+  const history =
+    getHistory();
+
+
+  history.unshift(
+    {
+      id:
+        Date.now(),
+
+      date:
+        new Date()
+          .toISOString(),
+
+      distance:
+        currentWalk.distance,
+
+      duration:
+        currentWalk.duration,
+
+      steps:
+        currentWalk.steps,
+
+      calories:
+        currentWalk.calories
+    }
+  );
+
+
+  saveHistory(
+    history
+  );
+
+
+  renderHistory();
+
+  updateDashboard();
+
+
+  const button =
+    document.getElementById(
+      "recordButton"
+    );
+
+
+  button.textContent =
+    "✓ 記録しました";
+
+  button.disabled =
+    true;
+
+}
+
+
+
+function renderHistory() {
+
+  const history =
+    getHistory();
+
+
+  const container =
+    document.getElementById(
+      "historyList"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  if (
+    history.length ===
+    0
+  ) {
+
+    container.innerHTML =
+      `
+      <div class="history-empty">
+        まだ散歩記録がありません。最初の散歩を記録してみよう。
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  history
+    .slice(
+      0,
+      10
+    )
+    .forEach(
+      item => {
 
         const date =
           new Date(
@@ -2780,198 +3090,317 @@
           );
 
 
-        if (
-          date >=
-          startOfWeek
-        ) {
+        const dateText =
+          date.toLocaleDateString(
+            "ja-JP",
+            {
+              month:
+                "numeric",
 
-          weekDistance +=
-            Number(
-              item.distance
-            );
+              day:
+                "numeric",
 
-
-          weekCalories +=
-            Number(
-              item.calories
-            );
-
-        }
+              weekday:
+                "short"
+            }
+          );
 
 
-        if (
-          isSameMonth(
-            date,
-            now
-          )
-        ) {
-
-          monthDistance +=
-            Number(
-              item.distance
-            );
+        const div =
+          document.createElement(
+            "div"
+          );
 
 
-          monthCalories +=
-            Number(
-              item.calories
-            );
-
-        }
-
-      }
-    );
+        div.className =
+          "history-item";
 
 
-    document.getElementById(
-      "weekDistance"
-    ).textContent =
-      weekDistance.toFixed(
-        1
-      );
+        div.innerHTML =
+          `
+
+          <div class="history-date">
+            ${dateText}
+          </div>
+
+          <div class="history-value">
+            <span>距離</span>
+            ${Number(item.distance).toFixed(1)} km
+          </div>
+
+          <div class="history-value">
+            <span>時間</span>
+            ${item.duration} 分
+          </div>
+
+          <div class="history-value">
+            <span>歩数</span>
+            ${Number(item.steps).toLocaleString()} 歩
+          </div>
+
+          <div class="history-value">
+            <span>消費</span>
+            ${item.calories} kcal
+          </div>
+
+          `;
 
 
-    document.getElementById(
-      "weekCalories"
-    ).textContent =
-      Math.round(
-        weekCalories
-      );
-
-
-    document.getElementById(
-      "monthDistance"
-    ).textContent =
-      monthDistance.toFixed(
-        1
-      );
-
-
-    document.getElementById(
-      "monthCalories"
-    ).textContent =
-      Math.round(
-        monthCalories
-      );
-
-  }
-
-
-
-  /* =========================================
-     削除
-  ========================================= */
-
-  function clearHistory() {
-
-    const history =
-      getHistory();
-
-
-    if (
-      history.length === 0
-    ) {
-
-      alert(
-        "削除する記録はありません。"
-      );
-
-      return;
-
-    }
-
-
-    const ok =
-      confirm(
-        "散歩記録をすべて削除しますか？"
-      );
-
-
-    if (
-      !ok
-    ) {
-
-      return;
-
-    }
-
-
-    localStorage.removeItem(
-      HISTORY_KEY
-    );
-
-
-    renderHistory();
-
-    updateDashboard();
-
-  }
-
-
-
-  /* =========================================
-     イベント
-  ========================================= */
-
-  document.getElementById(
-    "generateButton"
-  ).addEventListener(
-    "click",
-    generateRoute
-  );
-
-
-  document.getElementById(
-    "anotherButton"
-  ).addEventListener(
-    "click",
-    function() {
-
-      if (
-        !startPoint
-      ) {
-
-        alert(
-          "まずスタート地点を設定してください！"
+        container.appendChild(
+          div
         );
 
-        return;
+      }
+    );
+
+}
+
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function getStartOfWeek(
+  date
+) {
+
+  const result =
+    new Date(
+      date
+    );
+
+
+  const day =
+    result.getDay();
+
+
+  const diff =
+    day === 0
+      ? -6
+      : 1 - day;
+
+
+  result.setDate(
+    result.getDate() +
+    diff
+  );
+
+
+  result.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  return result;
+
+}
+
+
+
+function updateDashboard() {
+
+  const history =
+    getHistory();
+
+
+  const now =
+    new Date();
+
+
+  const startOfWeek =
+    getStartOfWeek(
+      now
+    );
+
+
+  let weekDistance = 0;
+  let weekCalories = 0;
+  let monthDistance = 0;
+  let monthCalories = 0;
+
+
+  history.forEach(
+    item => {
+
+      const date =
+        new Date(
+          item.date
+        );
+
+
+      if (
+        date >=
+        startOfWeek
+      ) {
+
+        weekDistance +=
+          Number(
+            item.distance
+          );
+
+        weekCalories +=
+          Number(
+            item.calories
+          );
 
       }
 
 
-      generateRoute();
+      if (
+        date.getFullYear() ===
+          now.getFullYear()
+
+        &&
+
+        date.getMonth() ===
+          now.getMonth()
+      ) {
+
+        monthDistance +=
+          Number(
+            item.distance
+          );
+
+        monthCalories +=
+          Number(
+            item.calories
+          );
+
+      }
 
     }
   );
 
 
   document.getElementById(
-    "recordButton"
-  ).addEventListener(
-    "click",
-    recordCurrentWalk
-  );
+    "weekDistance"
+  ).textContent =
+    weekDistance.toFixed(
+      1
+    );
 
 
   document.getElementById(
-    "clearHistoryButton"
-  ).addEventListener(
-    "click",
-    clearHistory
+    "weekCalories"
+  ).textContent =
+    Math.round(
+      weekCalories
+    );
+
+
+  document.getElementById(
+    "monthDistance"
+  ).textContent =
+    monthDistance.toFixed(
+      1
+    );
+
+
+  document.getElementById(
+    "monthCalories"
+  ).textContent =
+    Math.round(
+      monthCalories
+    );
+
+}
+
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearHistory() {
+
+  if (
+    getHistory().length ===
+    0
+  ) {
+
+    alert(
+      "削除する記録はありません。"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !confirm(
+      "散歩記録をすべて削除しますか？"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    HISTORY_KEY
   );
 
-
-
-  /* =========================================
-     初期表示
-  ========================================= */
-
-  loadProfile();
 
   renderHistory();
 
   updateDashboard();
+
+}
+
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+document.getElementById(
+  "generateButton"
+).addEventListener(
+  "click",
+  generateRoute
+);
+
+
+document.getElementById(
+  "anotherButton"
+).addEventListener(
+  "click",
+  generateRoute
+);
+
+
+document.getElementById(
+  "recordButton"
+).addEventListener(
+  "click",
+  recordCurrentWalk
+);
+
+
+document.getElementById(
+  "clearHistoryButton"
+).addEventListener(
+  "click",
+  clearHistory
+);
+
+
+
+/* =========================
+   START
+========================= */
+
+loadProfile();
+
+renderHistory();
+
+updateDashboard();
 
 </script>
 
